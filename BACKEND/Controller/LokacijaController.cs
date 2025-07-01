@@ -1,5 +1,7 @@
 ﻿using BACKEND.Data;
+using BACKEND.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BACKEND.Controller
 {
@@ -27,6 +29,30 @@ namespace BACKEND.Controller
             catch (Exception e)
             {
                 return BadRequest(e);
+            }
+        }
+
+
+
+        [HttpPost]
+
+        public IActionResult Post(Lokacija lokacija)
+        {
+            try
+            {
+                _context.Lokacije.Add(lokacija);
+                _context.SaveChanges();
+                return StatusCode(StatusCodes.Status201Created, lokacija);
+
+
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e);
+
+
+
             }
         }
 
