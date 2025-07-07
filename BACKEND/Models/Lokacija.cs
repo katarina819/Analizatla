@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BACKEND.Models
 {
-    public class Lokacija
+    public class Lokacija:Entitet
     {
-        [Key]
-        public int Sifra { get; set; }
-        public string mjestouzorkovanja { get; set; }
+        
+        public string MjestoUzorkovanja { get; set; } = "";
     }
 }
 

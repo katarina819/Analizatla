@@ -1,10 +1,25 @@
-﻿use master;
-go
-drop database if exists analiza_tla;
-go
-create database analiza_tla;
-go
-use analiza_tla;
+﻿
+ALTER DATABASE db_abb7ce_wp8 SET SINGLE_USER WITH
+ROLLBACK IMMEDIATE;
+GO
+ALTER DATABASE db_abb7ce_wp8 COLLATE Latin1_General_100_CI_AI_SC_UTF8;
+GO
+ALTER DATABASE db_abb7ce_wp8 SET MULTI_USER;
+GO
+
+
+
+
+
+
+
+--use master;
+--go
+--drop database if exists analiza_tla;
+--go
+--create database analiza_tla;
+--go
+--use analiza_tla;
 
 create table lokacije(
 sifra int not null primary key identity(1,1),
