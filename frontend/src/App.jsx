@@ -15,10 +15,14 @@ function App() {
     <Container>
       <NavBarEdunova/>
 
+      <Container className="app">
       <Routes>
         <Route path={RouteNames.HOME} element={<Pocetna />} />
         <Route path= {RouteNames.SMJER_PREGLED} element={<LokacijePregled/>} />
+        
       </Routes>
+      </Container>
+      
       <hr  />
       &copy; Edunova
     </Container>
