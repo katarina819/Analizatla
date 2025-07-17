@@ -16,6 +16,26 @@ async function get() {
 
 }
 
+async function dodaj(lokacija) {
+
+    return await HttpService.post('/Lokacija', lokacija)
+    .then((odgovor) => {return true;})
+    .catch((e) => {return false;});
+}
+
+async function obrisi(sifra) {
+
+    return await HttpService.delete('/Lokacija/' +sifra)
+    .then((odgovor) => {return true;})
+    .catch((e) => {return false;});
+}
+
+
+
+
+
 export default {
-    get
+    get,
+    dodaj,
+    obrisi
 }

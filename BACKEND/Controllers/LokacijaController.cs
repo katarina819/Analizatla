@@ -2,6 +2,7 @@
 using BACKEND.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace BACKEND.Controller
 {
@@ -24,6 +25,29 @@ namespace BACKEND.Controller
             try
             {
                 return Ok(_context.Lokacije);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpGet("{sifra:int}")]
+        public IActionResult Get(int sifra)
+        {
+            if (sifra <= 0)
+            {
+                return BadRequest("Šifra nije dobra");
+            }
+            try
+            {
+                var lokacija= _context.Lokacije.Find(sifra);
+                if (lokacija == null)
+                {
+                    return NotFound();
+                }
+                return Ok(lokacija);
 
             }
             catch (Exception e)

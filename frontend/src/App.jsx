@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import { RouteNames } from './constants'
 import Pocetna from './pages/Pocetna'
 import LokacijePregled from './pages/lokacije/LokacijePregled';
+import LokacijeDodaj from './pages/lokacije/LokacijeDodaj';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path={RouteNames.HOME} element={<Pocetna />} />
         <Route path= {RouteNames.SMJER_PREGLED} element={<LokacijePregled/>} />
+        <Route path = {RouteNames.SMJER_NOVI} element={<LokacijeDodaj/>} />
         
       </Routes>
       </Container>

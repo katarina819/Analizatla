@@ -3,6 +3,7 @@ export const RouteNames = {
     HOME: '/',
 
     SMJER_PREGLED: '/lokacija', // ruta na frontendu
+    SMJER_NOVI: '/lokacija/dodaj'
 
 }
 

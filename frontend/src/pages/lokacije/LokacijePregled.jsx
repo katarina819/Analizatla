@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
 import LokacijeService from "../../services/LokacijeService";
+import { Link } from "react-router-dom";
+import { RouteNames } from "../../constants";
 
 
 
@@ -19,13 +21,33 @@ export default function LokacijePregled () {
 
     },[])
 
+    function obrisi(sifra) {
+
+        if(!confirm('Sigurno obrisati')) {
+            return;
+
+        }
+        brisanje(sifra);
+    }
+
+    async function brisanje(sifra) {
+        const odgovor= await LokacijeService.obrisi(sifra);
+        dohvatiLokacije();
+       
+    }
+
     return (
         <>
-        Tablični Pregled lokacija
+        
+
+        <Link
+        className="btn btn-success"
+        to={RouteNames.SMJER_NOVI} >Dodavanje nove lokacije </Link>
         <Table striped bordered hover responsive>
             <thead>
                 <tr>
                     <th>Mjesto uzorkovanja</th>
+                    <th>Akcija</th>
 
                 </tr>
 
@@ -36,6 +58,15 @@ export default function LokacijePregled () {
                         <td>
                            {lokacija.mjestoUzorkovanja} 
                         </td>
+                        <td>
+
+                            <Button variant="danger"
+                            onClick={()=>obrisi(lokacija.sifra)}>
+                                Obriši
+                            </Button>
+                        </td>
+                        
+
                     </tr>
 
                 ))}
