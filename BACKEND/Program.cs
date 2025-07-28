@@ -42,6 +42,8 @@ app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
+app.UseCors("CorsPolicy");
+
 app.UseAuthorization();
 
 app.UseSwagger();
@@ -59,6 +61,6 @@ app.UseStaticFiles();
 app.UseDefaultFiles();
 app.MapFallbackToFile("index.html");
 
-app.UseCors("CorsPolicy");
+
 
 app.Run();

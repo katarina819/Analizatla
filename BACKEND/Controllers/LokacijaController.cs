@@ -9,7 +9,7 @@ namespace BACKEND.Controller
     [ApiController]
     [Route("api/v1/[controller]")]
 
-    public class LokacijaController:ControllerBase
+    public class LokacijaController : ControllerBase
     {
         private readonly EdunovaContext _context;
 
@@ -42,7 +42,7 @@ namespace BACKEND.Controller
             }
             try
             {
-                var lokacija= _context.Lokacije.Find(sifra);
+                var lokacija = _context.Lokacije.Find(sifra);
                 if (lokacija == null)
                 {
                     return NotFound();
@@ -80,10 +80,10 @@ namespace BACKEND.Controller
             }
 
 
-            
+
         }
 
-        [HttpPut("sifra:int")]
+        [HttpPut("{sifra:int}")]
         public IActionResult Put(int sifra, Lokacija lokacija)
         {
             if (sifra < 1)

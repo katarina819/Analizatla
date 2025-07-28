@@ -7,6 +7,7 @@ import { RouteNames } from './constants'
 import Pocetna from './pages/Pocetna'
 import LokacijePregled from './pages/lokacije/LokacijePregled';
 import LokacijeDodaj from './pages/lokacije/LokacijeDodaj';
+import LokacijePromjena from './pages/lokacije/LokacijePromjena';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path={RouteNames.HOME} element={<Pocetna />} />
         <Route path= {RouteNames.SMJER_PREGLED} element={<LokacijePregled/>} />
         <Route path = {RouteNames.SMJER_NOVI} element={<LokacijeDodaj/>} />
+        <Route path = {RouteNames.SMJER_PROMJENA} element={<LokacijePromjena/>} />
         
       </Routes>
       </Container>

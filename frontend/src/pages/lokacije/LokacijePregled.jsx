@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import LokacijeService from "../../services/LokacijeService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
 
 
@@ -9,6 +9,7 @@ import { RouteNames } from "../../constants";
 export default function LokacijePregled () {
 
     const [lokacija, setLokacije] = useState([]);
+    const navigate = useNavigate();
 
     async function dohvatiLokacije() {
        const odgovor = await LokacijeService.get()
@@ -60,6 +61,11 @@ export default function LokacijePregled () {
                         </td>
                         <td>
 
+                            <Button 
+                            onClick={()=>navigate(`/lokacija/${lokacija.sifra}`)}>
+                                Promjena
+                            </Button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
                             <Button variant="danger"
                             onClick={()=>obrisi(lokacija.sifra)}>
                                 Obriši
