@@ -3,20 +3,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BACKEND.Models
 {
-    public class Analiza
+    public class Analiza:Entitet
     {
        
-        public int Sifra { get; set; }
-
         public DateTime? Datum { get; set; }
 
-        
-        public int UzorakTla { get; set; }
 
-        
-        public int Analiticar { get; set; }
+        [Column("uzoraktla")]
+        public int UzorakTlaId { get; set; }
 
-        
+
+        [ForeignKey(nameof(UzorakTlaId))]
+        public Uzorcitla UzorakTla { get; set; }
+
+
+        [Column("analiticar")]
+        public int AnaliticarId { get; set; }
+
+        [ForeignKey(nameof(AnaliticarId))]
+        public Analiticar Analiticar { get; set; }
+
+
         public decimal pHVrijednost { get; set; }
 
         

@@ -23,6 +23,9 @@ export default function NavBarEdunova() {
             <Nav.Link href="#home">Početna</Nav.Link>
             <NavDropdown title="Programi" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={()=>navigate(RouteNames.SMJER_PREGLED)}>Lokacije</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=>navigate(RouteNames.ANALITICARI_PREGLED)}>Analitičari</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=>navigate(RouteNames.UZORCITLA_PREGLED)}>Uzorci Tla</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=>navigate(RouteNames.ANALIZA_PREGLED)}>Analiza Tla</NavDropdown.Item>
               
             </NavDropdown>
           </Nav>

@@ -2,7 +2,7 @@ import {HttpService} from "./HttpService"
 
 async function get() {
 
-    return await HttpService.get('/Lokacija')
+    return await HttpService.get('/Analiticar')
     .then((odgovor)=> {
 
         /* console.log(odgovor.data) */
@@ -19,7 +19,7 @@ async function get() {
 
 async function getBySifra(sifra) {
 
-    return await HttpService.get('/Lokacija/' + sifra)
+    return await HttpService.get('/Analiticar/' + sifra)
     .then((odgovor)=> {
 
         /* console.log(odgovor.data) */
@@ -33,22 +33,24 @@ async function getBySifra(sifra) {
 
 }
 
-async function dodaj(lokacija) {
-  return await HttpService.post('/Lokacija', lokacija)
-    .then((odgovor) => odgovor.data) // vraća kreiranu lokaciju s 'sifra'
-    .catch((e) => null);
-}
 
-async function obrisi(sifra) {
+async function dodaj(analiticar) {
 
-    return await HttpService.delete('/Lokacija/' +sifra)
+    return await HttpService.post('/Analiticar', analiticar)
     .then((odgovor) => {return true;})
     .catch((e) => {return false;});
 }
 
-async function promjeni(sifra, lokacija) {
+async function obrisi(sifra) {
 
-    return await HttpService.put('/Lokacija/' +sifra, lokacija)
+    return await HttpService.delete('/Analiticar/' +sifra)
+    .then((odgovor) => {return true;})
+    .catch((e) => {return false;});
+}
+
+async function promjeni(sifra, analiticar) {
+
+    return await HttpService.put('/Analiticar/' +sifra, analiticar)
     .then((odgovor) => {return true;})
     .catch((e) => {return false;});
 }
@@ -59,5 +61,5 @@ export default {
     getBySifra,
     dodaj,
     obrisi,
-    promjeni
-};
+    promjeni    
+}

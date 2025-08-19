@@ -1,4 +1,4 @@
-ï»¿using BACKEND.Data;
+using BACKEND.Data;
 using BACKEND.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +9,11 @@ namespace BACKEND.Controller
     [ApiController]
     [Route("api/v1/[controller]")]
 
-    public class LokacijaController : ControllerBase
+    public class AnaliticarController : ControllerBase
     {
         private readonly EdunovaContext _context;
 
-        public LokacijaController(EdunovaContext context)
+        public AnaliticarController(EdunovaContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace BACKEND.Controller
         {
             try
             {
-                return Ok(_context.Lokacije);
+                return Ok(_context.Analiticari.ToList());
 
             }
             catch (Exception e)
@@ -38,16 +38,16 @@ namespace BACKEND.Controller
         {
             if (sifra <= 0)
             {
-                return BadRequest("Å ifra nije dobra");
+                return BadRequest("Šifra nije dobra");
             }
             try
             {
-                var lokacija = _context.Lokacije.Find(sifra);
-                if (lokacija == null)
+                var analiticar = _context.Analiticari.Find(sifra);
+                if (analiticar == null)
                 {
                     return NotFound();
                 }
-                return Ok(lokacija);
+                return Ok(analiticar);
 
             }
             catch (Exception e)
@@ -55,18 +55,17 @@ namespace BACKEND.Controller
                 return BadRequest(e);
             }
         }
-
 
 
         [HttpPost]
 
-        public IActionResult Post(Lokacija lokacija)
+        public IActionResult Post(Analiticar analiticar)
         {
             try
             {
-                _context.Lokacije.Add(lokacija);
+                _context.Analiticari.Add(analiticar);
                 _context.SaveChanges();
-                return StatusCode(StatusCodes.Status201Created, lokacija);
+                return StatusCode(StatusCodes.Status201Created, analiticar);
 
 
             }
@@ -83,27 +82,31 @@ namespace BACKEND.Controller
 
         }
 
+
         [HttpPut("{sifra:int}")]
-        public IActionResult Put(int sifra, Lokacija lokacija)
+        public IActionResult Put(int sifra, Analiticar analiticar)
         {
             if (sifra < 1)
             {
-                return BadRequest(new { poruka = "Å ifra mora biti veÄ‡a od 0" });
+                return BadRequest(new { poruka = "Šifra mora biti veæa od 0" });
             }
 
             try
             {
-                Lokacija l = _context.Lokacije.Find(sifra);
-                if (l == null)
+                Analiticar a = _context.Analiticari.Find(sifra);
+                if (a == null)
                 {
                     return NotFound();
                 }
 
-                l.MjestoUzorkovanja = lokacija.MjestoUzorkovanja;
+                a.Ime = analiticar.Ime;
+                a.Prezime = analiticar.Prezime;
+                a.Kontakt = analiticar.Kontakt;
+                a.StrucnaSprema = analiticar.StrucnaSprema;
 
-                _context.Lokacije.Update(l);
+                _context.Analiticari.Update(a);
                 _context.SaveChanges();
-                return Ok(l);
+                return Ok(a);
             }
 
             catch (Exception e)
@@ -112,27 +115,36 @@ namespace BACKEND.Controller
             }
         }
 
+
         [HttpDelete("{sifra:int}")]
-        public async Task<IActionResult> Delete(int sifra)
+        public IActionResult Delete(int sifra)
         {
             if (sifra < 1)
-                return BadRequest(new { poruka = "Å ifra mora biti veÄ‡a od 0" });
-
-            var lokacija = await _context.Lokacije.FindAsync(sifra);
-            if (lokacija == null)
-                return NotFound(new { poruka = "Lokacija s tom Å¡ifrom ne postoji" });
+            {
+                return BadRequest(new { poruka = "Šifra mora biti veæa od 0" });
+            }
 
             try
             {
-                _context.Lokacije.Remove(lokacija);
-                await _context.SaveChangesAsync();
+                Analiticar a = _context.Analiticari.Find(sifra);
+                if (a == null)
+                {
+                    return NotFound();
+                }
+
+
+                _context.Analiticari.Remove(a);
+                _context.SaveChanges();
                 return NoContent();
             }
-            catch (DbUpdateException ex)
+
+            catch (Exception e)
             {
-                return BadRequest(new { poruka = "Ne moÅ¾ete obrisati lokaciju koja je u upotrebi.", detalji = ex.InnerException?.Message });
+                return BadRequest(e);
             }
         }
 
     }
 }
+    
+

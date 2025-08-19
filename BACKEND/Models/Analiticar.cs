@@ -1,8 +1,8 @@
 ﻿namespace BACKEND.Models
 {
-    public class Analiticar
+    public class Analiticar:Entitet
     {
-        public int Sifra { get; set; }
+       
         public string Ime { get; set; }
         public string Prezime { get; set; }
         public string Kontakt { get; set; }

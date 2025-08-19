@@ -12,5 +12,9 @@ namespace BACKEND.Data
         }
 
         public DbSet<Lokacija> Lokacije { get; set; }
+        public DbSet<Analiticar> Analiticari { get; set; }
+
+        public DbSet<Uzorcitla> UzorciTla {  get; set; }
+        public DbSet<Analiza> Analize {  get; set; }
     }
 }

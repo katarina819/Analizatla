@@ -1,11 +1,17 @@
 import axios from "axios";
-import { PRODUKCIJA } from "../constants";
+
+// Dinamički odabir baze URL-a
+const isLocal = window.location.hostname === "localhost";
+
+const BASE_URL = isLocal
+  ? `http://${window.location.hostname}:5150/api/v1` // HTTP port za lokalni razvoj
+  : 'https://katarina0-001-site1.rtempurl.com/api/v1';
 
 
 
 export const HttpService = axios.create({
-    baseURL: PRODUKCIJA + '/api/v1',
-    headers:{
+    baseURL: BASE_URL,
+    headers: {
         'Content-Type': 'application/json'
     }
-})
+});

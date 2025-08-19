@@ -6,7 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // globalni converter za DateTime? formata yyyy-MM-dd
+        options.JsonSerializerOptions.Converters.Add(new JsonNullableDateConverter());
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
@@ -40,9 +45,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.UseHttpsRedirection();
-
 app.UseCors("CorsPolicy");
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
@@ -57,7 +62,6 @@ app.UseSwaggerUI(options =>
 
 app.MapControllers();
 
-app.UseStaticFiles();
 app.UseDefaultFiles();
 app.MapFallbackToFile("index.html");
 

@@ -1,24 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BACKEND.Models
 {
-    public class Uzorcitla
+    [Table("uzorcitla")]
+    public class Uzorcitla:Entitet
     {
-        
-        public int Sifra { get; set; }
 
-        
+        [Column("masauzorka")]
         public decimal MasaUzorka { get; set; }
 
-        
+        [Column("vrstatla")]
         public string VrstaTla { get; set; }
 
+        [Column("datum")]
         public DateTime? Datum { get; set; }
 
-        
-       
+        [Column("lokacija")]
+        public int LokacijaId { get; set; }
 
-       
+        [ForeignKey("LokacijaId")]
+        public Lokacija Lokacija { get; set; }
+
+        
+
     }
+
 }
