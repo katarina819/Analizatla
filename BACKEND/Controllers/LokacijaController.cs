@@ -126,13 +126,26 @@ namespace BACKEND.Controller
             {
                 _context.Lokacije.Remove(lokacija);
                 await _context.SaveChangesAsync();
-                return NoContent();
+
+                // Ako brisanje uspije
+                return Ok(new { poruka = "Lokacija je uspješno obrisana." });
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest(new { poruka = "Ne možete obrisati lokaciju koja je u upotrebi.", detalji = ex.InnerException?.Message });
+                // Ako postoji foreign key constraint koji sprječava brisanje
+                return BadRequest(new
+                {
+                    poruka = "Ne možete obrisati lokaciju koja je u upotrebi.",
+                    detalji = ex.InnerException?.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                // Ostale neočekivane greške
+                return BadRequest(new { poruka = $"Dogodila se neočekivana greška: {ex.Message}" });
             }
         }
+
 
     }
 }

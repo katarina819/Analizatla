@@ -40,10 +40,15 @@ async function dodaj(lokacija) {
 }
 
 async function obrisi(sifra) {
-
-    return await HttpService.delete('/Lokacija/' +sifra)
-    .then((odgovor) => {return true;})
-    .catch((e) => {return false;});
+  try {
+    const odgovor = await HttpService.delete('/Lokacija/' +sifra);
+    return odgovor.data; 
+  } catch (e) {
+    if (e.response && e.response.data) {
+      return e.response.data; 
+    }
+    throw e; 
+  }
 }
 
 async function promjeni(sifra, lokacija) {

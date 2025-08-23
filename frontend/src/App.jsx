@@ -17,6 +17,8 @@ import UzorcitlaPromjena from './pages/uzorcitla/UzorcitlaPromjena';
 import AnalizePregled from './pages/analize/AnalizePregled';
 import AnalizeDodaj from './pages/analize/AnalizeDodaj';
 import AnalizePromjena from './pages/analize/AnalizePromjena';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -47,6 +49,7 @@ function App() {
 
         
       </Routes>
+      <ToastContainer position="top-center" autoClose={3000} />
       </Container>
       
       <hr  />

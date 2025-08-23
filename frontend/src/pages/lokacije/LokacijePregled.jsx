@@ -3,12 +3,14 @@ import { Button, Container, Table } from "react-bootstrap";
 import LokacijeService from "../../services/LokacijeService";
 import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
+import { toast } from "react-toastify";
 
 
 
 export default function LokacijePregled () {
 
     const [lokacija, setLokacije] = useState([]);
+    
     const navigate = useNavigate();
 
     async function dohvatiLokacije() {
@@ -32,14 +34,28 @@ export default function LokacijePregled () {
     }
 
     async function brisanje(sifra) {
-        const odgovor= await LokacijeService.obrisi(sifra);
+    try {
+      const odgovor = await LokacijeService.obrisi(sifra);
+
+      if (odgovor.greska) {
+        toast.error(odgovor.poruka || "Ne možete obrisati ovu lokaciju jer je povezana s drugim podacima.");
+        
+      } else {
+        toast.success(odgovor.poruka || "Lokacija je uspješno obrisana.");
+        
         dohvatiLokacije();
-       
+      }
+    } catch (err) {
+      console.error("Greška kod brisanja:", err);
+      toast.error("Dogodila se neočekivana greška");
+      
     }
+  }
+
 
     return (
         <>
-        
+          
 
         <Link
         className="btn btn-success"

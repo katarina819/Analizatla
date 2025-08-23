@@ -3,9 +3,11 @@ import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import AnalizeService from "../../services/AnalizeService";
 import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
+import { toast } from "react-toastify";
 
 export default function AnalizePregled() {
   const [analize, setAnalize] = useState([]);
+  
   const navigate = useNavigate();
 
   async function dohvatiAnalize() {
@@ -31,20 +33,33 @@ export default function AnalizePregled() {
   }
 
   async function obrisi(sifra) {
-    if (!window.confirm("Sigurno obrisati ovu analizu?")) return;
     try {
-      await AnalizeService.obrisi(sifra);
-      dohvatiAnalize();
-    } catch (error) {
-      console.error("Greška pri brisanju:", error);
+      const odgovor = await AnalizeService.obrisi(sifra);
+
+      if (odgovor.greska) {
+        toast.error(odgovor.poruka || "Ne možete obrisati ovu analizu jer je povezana s drugim podacima.");
+        
+      } else {
+        toast.success(odgovor.poruka || "Analiza je uspješno obrisana.");
+        
+        dohvatiAnalize();
+      }
+    } catch (err) {
+      console.error("Greška kod brisanja:", err);
+       toast.error("Dogodila se neočekivana greška");
+      
     }
   }
 
   return (
+
     <Container className="mt-4">
       <Link className="btn btn-success mb-3" to={RouteNames.ANALIZA_NOVI}>
         Dodavanje analize
       </Link>
+
+     
+
 
       <Row xs={1} md={2} lg={3} className="g-4">
         {analize.map((u) => (

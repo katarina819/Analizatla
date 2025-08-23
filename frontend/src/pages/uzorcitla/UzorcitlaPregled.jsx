@@ -3,12 +3,14 @@ import { Button, Container, Table } from "react-bootstrap";
 import UzorcitlaService from "../../services/UzorcitlaService";
 import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
+import { toast } from "react-toastify";
 
 
 
 export default function UzorcitlaPregled () {
 
     const [uzorcitla, setUzorciTla] = useState([]);
+    
     const navigate = useNavigate();
 
     async function dohvatiUzorciTla() {
@@ -46,13 +48,25 @@ export default function UzorcitlaPregled () {
     }
 
     async function brisanje(sifra) {
-        const odgovor= await UzorcitlaService.obrisi(sifra);
+    try {
+      const odgovor = await UzorcitlaService.obrisi(sifra);
+
+      if (odgovor.greska) {
+        toast.error(odgovor.poruka || "Ne možete obrisati ovaj uzorak jer je povezan s drugim podacima.");
+      } else {
+        toast.success(odgovor.poruka || "Uzorak je uspješno obrisan.");
         dohvatiUzorciTla();
-       
+      }
+    } catch (err) {
+      console.error("Greška kod brisanja:", err);
+      toast.error("Dogodila se neočekivana greška");
     }
+  }
 
    return (
      <>
+      
+
        <Link
          className="btn btn-success"
          to={RouteNames.UZORCITLA_NOVI}

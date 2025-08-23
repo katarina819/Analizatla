@@ -129,18 +129,26 @@ namespace BACKEND.Controller
                 Analiticar a = _context.Analiticari.Find(sifra);
                 if (a == null)
                 {
-                    return NotFound();
+                    return NotFound(new { poruka = "Analitièar ne postoji" });
                 }
-
 
                 _context.Analiticari.Remove(a);
                 _context.SaveChanges();
-                return NoContent();
-            }
 
-            catch (Exception e)
+                return Ok(new { poruka = "Analitièar je uspješno obrisan." });
+            }
+            catch (DbUpdateException dbEx)
             {
-                return BadRequest(e);
+                // Ovo hvata grešku zbog vanjskog kljuèa
+                return BadRequest(new
+                {
+                    poruka = "Ne možete obrisati ovog analitièara jer je povezan s drugim podacima."
+                });
+            }
+            catch (Exception ex)
+            {
+                // Ostale neoèekivane greške
+                return BadRequest(new { poruka = $"Dogodila se neoèekivana greška: {ex.Message}" });
             }
         }
 

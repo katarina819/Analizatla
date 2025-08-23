@@ -3,12 +3,14 @@ import { Button, Container, Table } from "react-bootstrap";
 import AnaliticariService from "../../services/AnaliticariService";
 import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
+import { toast } from "react-toastify";
 
 
 
 export default function AnaliticariPregled () {
 
     const [analiticar, setAnaliticari] = useState([]);
+    
     const navigate = useNavigate();
 
     async function dohvatiAnaliticari() {
@@ -35,14 +37,30 @@ export default function AnaliticariPregled () {
 
     
     async function brisanje(sifra) {
-        const odgovor= await AnaliticariService.obrisi(sifra);
+    try {
+      const odgovor = await AnaliticariService.obrisi(sifra);
+
+      if (odgovor.greska) {
+        toast.error(odgovor.poruka || "Ne možete obrisati ovog analitičara jer je povezan s drugim podacima.");
+        
+      } else {
+        toast.success(odgovor.poruka || "Analitičar je uspješno obrisan.");
+        
         dohvatiAnaliticari();
-           
+      }
+    } catch (err) {
+      console.error("Greška kod brisanja:", err);
+      toast.error("Dogodila se neočekivana greška");
+      
     }
+  }
 
 
 return (
   <>
+
+    
+
     <Link
       className="btn btn-success"
       to={RouteNames.ANALITICARI_NOVI}

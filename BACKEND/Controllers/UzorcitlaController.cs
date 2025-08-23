@@ -141,23 +141,37 @@ namespace BACKEND.Controller
         [HttpDelete("{sifra:int}")]
         public async Task<IActionResult> Delete(int sifra)
         {
-            if (sifra <= 0) return BadRequest("Šifra nije dobra");
+            if (sifra <= 0)
+                return BadRequest(new { poruka = "Šifra nije dobra" });
 
             try
             {
                 var uzorak = await _context.UzorciTla.FindAsync(sifra);
-                if (uzorak == null) return NotFound("Uzorak nije pronaðen");
+                if (uzorak == null)
+                    return NotFound(new { poruka = "Uzorak nije pronaðen" });
 
                 _context.UzorciTla.Remove(uzorak);
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                // Ako brisanje uspije
+                return Ok(new { poruka = "Uzorak je uspješno obrisan." });
             }
-            catch (Exception e)
+            catch (DbUpdateException dbEx)
             {
-                return BadRequest(e.Message);
+                // Ako postoji foreign key constraint koji sprjeèava brisanje
+                return BadRequest(new
+                {
+                    poruka = "Ne možete obrisati ovaj uzorak jer je povezan s drugim podacima.",
+                    detalji = dbEx.InnerException?.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                // Ostale neoèekivane greške
+                return BadRequest(new { poruka = $"Dogodila se neoèekivana greška: {ex.Message}" });
             }
         }
+
 
 
 

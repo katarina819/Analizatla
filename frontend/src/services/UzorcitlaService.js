@@ -45,9 +45,15 @@ async function dodaj({ masaUzorka, vrstaTla, datum, mjestoUzorkovanja }) {
 }
 
 async function obrisi(sifra) {
-  return await HttpService.delete('/Uzorcitla/' + sifra)
-    .then(() => true)
-    .catch(() => false);
+  try {
+    const odgovor = await HttpService.delete('/Uzorcitla/' + sifra);
+    return odgovor.data; 
+  } catch (e) {
+    if (e.response && e.response.data) {
+      return e.response.data; 
+    }
+    throw e; 
+  }
 }
 
 async function promjeni(sifra, { masaUzorka, vrstaTla, datum, mjestoUzorkovanja }) {

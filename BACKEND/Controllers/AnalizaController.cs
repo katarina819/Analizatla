@@ -223,22 +223,33 @@ namespace BACKEND.Controllers
         [HttpDelete("{sifra:int}")]
         public IActionResult Delete(int sifra)
         {
+            if (sifra < 1)
+                return BadRequest(new { poruka = "Šifra mora biti veæa od 0" });
+
             try
             {
                 var analiza = _context.Analize.Find(sifra);
                 if (analiza == null)
-                    return NotFound();
+                    return NotFound(new { poruka = "Analiza ne postoji" });
 
                 _context.Analize.Remove(analiza);
                 _context.SaveChanges();
 
-                return NoContent();
+                // Ako brisanje uspije
+                return Ok(new { poruka = "Analiza je uspješno obrisana." });
             }
-            catch (Exception e)
+            catch (DbUpdateException)
             {
-                return BadRequest(e.Message);
+                // Ako postoji foreign key constraint koji sprjeèava brisanje
+                return BadRequest(new { poruka = "Ne možete obrisati ovu analizu jer je povezana s drugim podacima." });
+            }
+            catch (Exception ex)
+            {
+                // Ostale neoèekivane greške
+                return BadRequest(new { poruka = $"Dogodila se neoèekivana greška: {ex.Message}" });
             }
         }
+
     }
 }
 

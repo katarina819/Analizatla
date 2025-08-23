@@ -48,13 +48,17 @@ const AnalizeService = {
   // Obriši analizu
   obrisi: async (sifra) => {
     try {
-      const response = await HttpService.delete(`/analiza/${sifra}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Greška pri brisanju analize ${sifra}:`, error);
-      throw error;
+      const odgovor = await HttpService.delete(`/analiza/${sifra}`);
+      return odgovor.data; 
+    } catch (e) {
+      if (e.response && e.response.data) {
+        return e.response.data; 
+      }
+      throw e;
     }
   }
 };
+
+
 
 export default AnalizeService;
