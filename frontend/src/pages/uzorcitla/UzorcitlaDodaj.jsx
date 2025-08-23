@@ -43,7 +43,7 @@ export default function UzorcitlaDodaj() {
         <Form onSubmit={odradiSubmit}>
 
             <Form.Group controlId="masaUzorka">
-                <Form.Label>Masa uzorka</Form.Label>
+                <Form.Label>Masa uzorka (g)</Form.Label>
                 <Form.Control
                     type="number"
                     name="masaUzorka"

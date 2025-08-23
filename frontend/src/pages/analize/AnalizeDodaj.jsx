@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Card, Container, Spinner, Alert, Button, Modal, Form } from "react-bootstrap";
-import axios from "axios";
+import AnalizeService from "../../services/AnalizeService"; 
 
 // Komponenta za pojedinu Analizu
 const AnalizaCard = ({ analiza }) => {
@@ -23,7 +23,7 @@ const AnalizaCard = ({ analiza }) => {
               <p><strong>Humus:</strong> {analiza.humus}</p>
             </Col>
             <Col>
-              <p><strong>Masa uzorka:</strong> {analiza.masaUzorka}</p>
+              <p><strong>Masa uzorka (g):</strong> {analiza.masaUzorka}</p>
               <p><strong>Vrsta tla:</strong> {analiza.vrstaTla}</p>
               <p><strong>Datum uzorka:</strong> {analiza.datumUzorka}</p>
               <p><strong>Mjesto uzorkovanja:</strong> {analiza.mjestoUzorkovanja}</p>
@@ -70,8 +70,9 @@ const AnalizeGrid = () => {
 
   const fetchAnalize = async () => {
     try {
-      const res = await axios.get("https://localhost:7099/api/v1/analiza");
-      setAnalize(res.data);
+      const res = await AnalizeService.get(); 
+      console.log("Podaci sa servera:", res); // <--- Ovdje vidiš što vraća backend
+      setAnalize(res || []);
       setLoading(false);
     } catch (err) {
       setError(err.message || "Greška prilikom dohvaćanja analiza");
@@ -88,26 +89,29 @@ const AnalizeGrid = () => {
 
   // Transformacija podataka u odgovarajuće tipove
   const payload = {
-    datum: new Date(novaAnaliza.datum),
-    pHVrijednost: parseFloat(novaAnaliza.pHVrijednost),
-    Fosfor: parseFloat(novaAnaliza.fosfor),
-    Kalij: parseFloat(novaAnaliza.kalij),
-    Magnezij: parseFloat(novaAnaliza.magnezij),
-    Karbonati: parseFloat(novaAnaliza.karbonati),
-    Humus: parseFloat(novaAnaliza.humus),
-    MasaUzorka: parseFloat(novaAnaliza.masaUzorka),
-    VrstaTla: novaAnaliza.vrstaTla,
-    DatumUzorka: new Date(novaAnaliza.datumUzorka),
-    MjestoUzorkovanja: novaAnaliza.mjestoUzorkovanja,
-    Ime: novaAnaliza.ime,
-    Prezime: novaAnaliza.prezime,
-    Kontakt: novaAnaliza.kontakt,
-    StrucnaSprema: novaAnaliza.strucnaSprema
-  };
+  datum: novaAnaliza.datum,
+  pHVrijednost: parseFloat(novaAnaliza.pHVrijednost),
+  fosfor: parseFloat(novaAnaliza.fosfor),
+  kalij: parseFloat(novaAnaliza.kalij),
+  magnezij: parseFloat(novaAnaliza.magnezij),
+  karbonati: parseFloat(novaAnaliza.karbonati),
+  humus: parseFloat(novaAnaliza.humus),
+  masaUzorka: parseFloat(novaAnaliza.masaUzorka),
+  vrstaTla: novaAnaliza.vrstaTla,
+  datumUzorka: novaAnaliza.datumUzorka,
+  mjestoUzorkovanja: novaAnaliza.mjestoUzorkovanja,
+  ime: novaAnaliza.ime,
+  prezime: novaAnaliza.prezime,
+  kontakt: novaAnaliza.kontakt,
+  strucnaSprema: novaAnaliza.strucnaSprema
+};
+
+
 
   try {
-    const res = await axios.post("https://localhost:7099/api/v1/analiza", payload);
-    setAnalize([...analize, res.data]); // dodaj novu analizu u listu
+    await AnalizeService.dodaj(payload); // umjesto axios.post
+    await fetchAnalize(); 
+
     setShowModal(false);
     setNovaAnaliza({
       pHVrijednost: "",
@@ -142,10 +146,10 @@ const AnalizeGrid = () => {
       <Button className="mb-3" onClick={() => setShowModal(true)}>Dodaj novu analizu</Button>
 
       <Row>
-        {analize.map(a => (
-          <AnalizaCard key={a.sifra} analiza={a} />
-        ))}
-      </Row>
+      {analize?.map(a => (
+        <AnalizaCard key={a.sifra} analiza={a} />
+      ))}
+    </Row>
 
       {/* Modal za dodavanje nove analize */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
@@ -158,67 +162,67 @@ const AnalizeGrid = () => {
               <Col md={6}>
                 <Form.Group className="mb-2">
                   <Form.Label>pH</Form.Label>
-                  <Form.Control name="pHVrijednost" value={novaAnaliza.pHVrijednost} onChange={handleChange} />
+                  <Form.Control name="pHVrijednost" value={novaAnaliza.pHVrijednost || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Fosfor</Form.Label>
-                  <Form.Control name="fosfor" value={novaAnaliza.fosfor} onChange={handleChange} />
+                  <Form.Control name="fosfor" value={novaAnaliza.fosfor || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Kalij</Form.Label>
-                  <Form.Control name="kalij" value={novaAnaliza.kalij} onChange={handleChange} />
+                  <Form.Control name="kalij" value={novaAnaliza.kalij || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Magnezij</Form.Label>
-                  <Form.Control name="magnezij" value={novaAnaliza.magnezij} onChange={handleChange} />
+                  <Form.Control name="magnezij" value={novaAnaliza.magnezij || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Karbonati</Form.Label>
-                  <Form.Control name="karbonati" value={novaAnaliza.karbonati} onChange={handleChange} />
+                  <Form.Control name="karbonati" value={novaAnaliza.karbonati || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Humus</Form.Label>
-                  <Form.Control name="humus" value={novaAnaliza.humus} onChange={handleChange} />
+                  <Form.Control name="humus" value={novaAnaliza.humus || ""} onChange={handleChange} />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-2">
-                  <Form.Label>Masa uzorka</Form.Label>
-                  <Form.Control name="masaUzorka" value={novaAnaliza.masaUzorka} onChange={handleChange} />
+                  <Form.Label>Masa uzorka (g)</Form.Label>
+                  <Form.Control name="masaUzorka" value={novaAnaliza.masaUzorka || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Vrsta tla</Form.Label>
-                  <Form.Control name="vrstaTla" value={novaAnaliza.vrstaTla} onChange={handleChange} />
+                  <Form.Control name="vrstaTla" value={novaAnaliza.vrstaTla || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Datum uzorka</Form.Label>
-                  <Form.Control type="date" name="datumUzorka" value={novaAnaliza.datumUzorka} onChange={handleChange} />
+                  <Form.Control type="date" name="datumUzorka" value={novaAnaliza.datumUzorka || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Datum analize</Form.Label>
-                  <Form.Control type="date" name="datum" value={novaAnaliza.datum} onChange={handleChange} />
+                  <Form.Control type="date" name="datum" value={novaAnaliza.datum || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Ime analitičara</Form.Label>
-                  <Form.Control name="ime" value={novaAnaliza.ime} onChange={handleChange} />
+                  <Form.Control name="ime" value={novaAnaliza.ime || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Prezime analitičara</Form.Label>
-                  <Form.Control name="prezime" value={novaAnaliza.prezime} onChange={handleChange} />
+                  <Form.Control name="prezime" value={novaAnaliza.prezime || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Kontakt</Form.Label>
-                  <Form.Control name="kontakt" value={novaAnaliza.kontakt} onChange={handleChange} />
+                  <Form.Control name="kontakt" value={novaAnaliza.kontakt || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label>Stručna sprema</Form.Label>
-                  <Form.Control name="strucnaSprema" value={novaAnaliza.strucnaSprema} onChange={handleChange} />
+                  <Form.Control name="strucnaSprema" value={novaAnaliza.strucnaSprema || ""} onChange={handleChange} />
                 </Form.Group>
                 <Form.Group className="mb-2">
                 <Form.Label>Mjesto uzorkovanja</Form.Label>
                 <Form.Control 
                     name="mjestoUzorkovanja" 
-                    value={novaAnaliza.mjestoUzorkovanja} 
+                    value={novaAnaliza.mjestoUzorkovanja || ""} 
                     onChange={handleChange} 
                 />
                 </Form.Group>

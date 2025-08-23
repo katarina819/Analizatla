@@ -11,6 +11,7 @@ builder.Services.AddControllers()
     {
         // globalni converter za DateTime? formata yyyy-MM-dd
         options.JsonSerializerOptions.Converters.Add(new JsonNullableDateConverter());
+
     });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
@@ -32,6 +33,9 @@ builder.Services.AddCors(o=>
         p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
+
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 
 

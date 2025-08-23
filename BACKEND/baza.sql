@@ -21,6 +21,19 @@ GO
 --go
 --use analiza_tla;
 
+
+create table operateri(
+sifra int not null primary key identity(1,1),
+email varchar(50) not null,
+lozinka varchar(200) not null
+);
+
+-- Lozinka edunova generirana pomoću https://bcrypt-generator.com/
+insert into operateri values ('edunova@edunova.hr',
+'$2a$12$ikGB2OIhVuf/wP8EmsiUNe0EXgI258LHS4dDjbJT.jALR8WPz3RlW');
+
+
+
 create table lokacije(
 sifra int not null primary key identity(1,1),
 mjestouzorkovanja varchar (100) not null

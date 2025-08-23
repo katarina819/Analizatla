@@ -59,7 +59,7 @@ export default function AnalizePregled() {
                   <strong>Magnezij:</strong> {u.magnezij}<br/>
                   <strong>Karbonati:</strong> {u.karbonati}<br/>
                   <strong>Humus:</strong> {u.humus}<br/>
-                  <strong>Masa uzorka:</strong> {u.masaUzorka}<br/>
+                  <strong>Masa uzorka (g):</strong> {u.masaUzorka}<br/>
                   <strong>Analitičar:</strong> {u.ime} {u.prezime}<br/>
                   <strong>Kontakt:</strong> {u.kontakt}<br/>
                   <strong>Stručna sprema:</strong> {u.strucnaSprema}<br/>

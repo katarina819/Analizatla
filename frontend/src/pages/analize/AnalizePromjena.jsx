@@ -114,7 +114,7 @@ export default function AnalizePromjeni() {
 
 
     const polja = [
-        { label: "Masa uzorka", key: "MasaUzorka", type: "number", step: "0.01" },
+        { label: "Masa uzorka (g)", key: "MasaUzorka", type: "number", step: "0.01" },
         { label: "Vrsta tla", key: "VrstaTla", type: "text" },
         { label: "Datum uzorka", key: "Datum", type: "date" },
         { label: "Mjesto uzorkovanja", key: "MjestoUzorkovanja", type: "text" },

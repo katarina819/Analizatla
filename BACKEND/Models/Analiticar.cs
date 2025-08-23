@@ -7,5 +7,8 @@
         public string Prezime { get; set; }
         public string Kontakt { get; set; }
         public string StrucnaSprema { get; set; } = "";
+
+        public ICollection<Analiza>?  Analize { get; set; }
+
     }
 }

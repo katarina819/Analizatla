@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BACKEND.Models
 {
@@ -21,7 +22,11 @@ namespace BACKEND.Models
         [ForeignKey("LokacijaId")]
         public Lokacija Lokacija { get; set; }
 
-        
+        [JsonIgnore]
+        public ICollection<Analiza>? Analize { get; set; }
+
+
+
 
     }
 

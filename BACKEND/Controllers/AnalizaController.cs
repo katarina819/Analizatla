@@ -3,6 +3,7 @@ using BACKEND.DTOs;
 using BACKEND.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 
 
@@ -110,53 +111,72 @@ namespace BACKEND.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] AnalizaCreateUpdateDto dto)
         {
+            if (dto == null)
+                return BadRequest("Payload ne smije biti null");
+
             try
             {
-                // Kreiramo novi Uzorcitla
-                var Uzorcitla = new Uzorcitla
-                {
-                    MasaUzorka = dto.MasaUzorka,
-                    VrstaTla = dto.VrstaTla,
-                    Datum = dto.DatumUzorka,
-                    Lokacija = new Lokacija
-                    {
-                        MjestoUzorkovanja = dto.MjestoUzorkovanja
-                    }
-                };
-
-                // Kreiramo novog Analiticara
-                var analiticar = new Analiticar
-                {
-                    Ime = dto.Ime,
-                    Prezime = dto.Prezime,
-                    Kontakt = dto.Kontakt,
-                    StrucnaSprema = dto.StrucnaSprema
-                };
-
-                // Kreiramo Analizu i povežemo s UzorkomTla i Analiticarom
                 var analiza = new Analiza
                 {
-                    Datum = dto.Datum,
+                    Datum = dto.Datum ?? DateTime.Now,
                     pHVrijednost = dto.pHVrijednost,
                     Fosfor = dto.Fosfor,
                     Kalij = dto.Kalij,
                     Magnezij = dto.Magnezij,
                     Karbonati = dto.Karbonati,
                     Humus = dto.Humus,
-                    UzorakTla = Uzorcitla,
-                    Analiticar = analiticar
+                    UzorakTla = new Uzorcitla
+                    {
+                        MasaUzorka = dto.MasaUzorka,
+                        VrstaTla = dto.VrstaTla ?? "",
+                        Datum = dto.DatumUzorka ?? DateTime.Now,
+                        Lokacija = new Lokacija
+                        {
+                            MjestoUzorkovanja = dto.MjestoUzorkovanja ?? ""
+                        }
+                    },
+                    Analiticar = new Analiticar
+                    {
+                        Ime = dto.Ime ?? "",
+                        Prezime = dto.Prezime ?? "",
+                        Kontakt = dto.Kontakt ?? "",
+                        StrucnaSprema = dto.StrucnaSprema ?? ""
+                    }
                 };
 
                 _context.Analize.Add(analiza);
                 _context.SaveChanges();
 
-                return CreatedAtAction(nameof(Get), new { sifra = analiza.Sifra }, analiza);
+                // Vraæamo DTO
+                var result = new AnalizaDto
+                {
+                    Sifra = analiza.Sifra,
+                    Datum = analiza.Datum,
+                    pHVrijednost = analiza.pHVrijednost,
+                    Fosfor = analiza.Fosfor,
+                    Kalij = analiza.Kalij,
+                    Magnezij = analiza.Magnezij,
+                    Karbonati = analiza.Karbonati,
+                    Humus = analiza.Humus,
+                    MasaUzorka = analiza.UzorakTla.MasaUzorka,
+                    VrstaTla = analiza.UzorakTla.VrstaTla,
+                    DatumUzorka = analiza.UzorakTla.Datum,
+                    MjestoUzorkovanja = analiza.UzorakTla.Lokacija.MjestoUzorkovanja,
+                    Ime = analiza.Analiticar.Ime,
+                    Prezime = analiza.Analiticar.Prezime,
+                    Kontakt = analiza.Analiticar.Kontakt,
+                    StrucnaSprema = analiza.Analiticar.StrucnaSprema
+                };
+
+                return CreatedAtAction(nameof(Get), new { sifra = analiza.Sifra }, result);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e.ToString());
             }
         }
+
+
 
 
         // PUT: ažuriranje postojeæe analize

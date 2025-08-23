@@ -63,7 +63,7 @@ export default function UzorcitlaPregled () {
        <Table striped bordered hover responsive>
          <thead>
            <tr>
-             <th>Masa uzorka</th>
+             <th>Masa uzorka (g) </th>
              <th>Vrsta tla</th>
              <th>Datum</th>
              <th>Lokacija</th>
