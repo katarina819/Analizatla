@@ -60,11 +60,25 @@ async function promjeni(sifra, analiticar) {
     .catch((e) => {return false;});
 }
 
+async function getStranicenje(stranica, uvjet) {
+    try {
+        const odgovor = await HttpService.get(`/Analiticar/traziStranicenje/${stranica}?uvjet=${uvjet}`);
+        return odgovor.data;
+    } catch (e) {
+        if (e.response && e.response.data) {
+            return e.response.data;
+        }
+        throw e;
+    }
+}
+
+
 
 export default {
     get,
     getBySifra,
     dodaj,
     obrisi,
-    promjeni    
+    promjeni,
+    getStranicenje    
 }

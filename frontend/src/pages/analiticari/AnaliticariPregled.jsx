@@ -5,25 +5,47 @@ import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
 import { toast } from "react-toastify";
 import { BACKEND_URL } from "../../constants";
+import useLoading from "../../hooks/useLoading";
+import { Col, Form, Pagination } from "react-bootstrap";
 
 
 export default function AnaliticariPregled () {
 
     const [analiticar, setAnaliticari] = useState([]);
-    
+    const [stranica, setStranica] = useState(1);
+    const [uvjet, setUvjet] = useState('');
+    const { showLoading, hideLoading } = useLoading();
+    const [ukupnoStranica, setUkupnoStranica] = useState(1);
+
     const navigate = useNavigate();
 
     async function dohvatiAnaliticari() {
-       const odgovor = await AnaliticariService.get()
-       console.log("Analiticari response:", odgovor);
-       setAnaliticari(odgovor);
+    showLoading();
+    let odgovor = await AnaliticariService.getStranicenje(stranica, uvjet);
+    hideLoading();
 
+    if (!odgovor) {
+        setAnaliticari([]);
+        return;
     }
+
+    // Ako backend vraća { lista: [...], ukupnoStranica: X }
+    if (Array.isArray(odgovor.lista)) {
+        setAnaliticari(odgovor.lista);
+        setUkupnoStranica(odgovor.ukupnoStranica || 1);
+    } else if (Array.isArray(odgovor)) {
+        setAnaliticari(odgovor);
+    } else {
+        setAnaliticari([]);
+    }
+}
+
+
 
     useEffect(()=>{
         dohvatiAnaliticari();
 
-    },[])
+    },[stranica, uvjet]);
 
 
     function obrisi(sifra) {
@@ -90,10 +112,54 @@ function handleFileChange(event, id) {
     }
   }
 
+  function promjeniUvjet(e) {
+        if(e.nativeEvent.key == "Enter"){
+            console.log('Enter')
+            setStranica(1);
+            setUvjet(e.nativeEvent.srcElement.value);
+            setAnaliticari([]);
+        }
+    }
+
+    function povecajStranicu() {
+    if(stranica < ukupnoStranica) setStranica(stranica + 1);
+    }
+
+    function smanjiStranicu() {
+        if(stranica > 1) setStranica(stranica - 1);
+    }
+
+
+
 
 return (
   <>
-
+    
+           
+                <Col key={1} sm={12} lg={4} md={4}>
+                    <Form.Control
+                    type='text'
+                    name='trazilica'
+                    placeholder='Dio imena i prezimena [Enter]'
+                    maxLength={255}
+                    defaultValue=''
+                    onKeyUp={promjeniUvjet}
+                    />
+                </Col>
+                <Col key={2} sm={12} lg={4} md={4}>
+                    {analiticar && analiticar.length > 0 && (
+                            <div style={{ display: "flex", justifyContent: "center" }}>
+                               {/*  <Pagination size="lg">
+                                <Pagination.Prev onClick={smanjiStranicu} />
+                                <Pagination.Item disabled>{stranica}</Pagination.Item> 
+                                <Pagination.Next
+                                    onClick={povecajStranicu}
+                                />
+                            </Pagination> */}
+                        </div>
+                    )}
+                </Col>
+                <Col key={3} sm={12} lg={4} md={4}></Col>
     
 
     <Link
@@ -103,7 +169,7 @@ return (
       Dodavanje novog analitičara
     </Link>
 
-    <Table striped bordered hover responsive>
+   <Table striped bordered hover responsive>
   <thead>
     <tr>
       <th>Slika</th>
@@ -116,35 +182,33 @@ return (
   </thead>
 
   <tbody>
-    {analiticar && analiticar.map((a, index) => (
+    {Array.isArray(analiticar) && analiticar.map((a, index) => (
       <tr key={index}>
         <td>
           {a.slikaUrl ? (
             <img 
-            src={a.slikaUrl ? `${BACKEND_URL}${a.slikaUrl}` : '/default-avatar.png'} 
-            alt={`${a.ime} ${a.prezime}`} 
-            style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "50%" }}
-          />
-
+              src={a.slikaUrl ? `${BACKEND_URL}${a.slikaUrl}` : '/default-avatar.png'} 
+              alt={`${a.ime} ${a.prezime}`} 
+              style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "50%" }}
+            />
           ) : (
             <span>Nema slike</span>
           )}
           <br />
           <Button
-          size="sm"
-          style={{ marginTop: "5px" }}
-          onClick={() => document.getElementById(`file-${a.sifra}`).click()}
-        >
-          Promijeni sliku
-        </Button>
-        <input
-          type="file"
-          id={`file-${a.sifra}`}
-          style={{ display: "none" }}
-          accept="image/*"
-          onChange={(e) => handleFileChange(e, a.sifra)}
-        />
-
+            size="sm"
+            style={{ marginTop: "5px" }}
+            onClick={() => document.getElementById(`file-${a.sifra}`).click()}
+          >
+            Promijeni sliku
+          </Button>
+          <input
+            type="file"
+            id={`file-${a.sifra}`}
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={(e) => handleFileChange(e, a.sifra)}
+          />
         </td>
         <td>{a.ime}</td>
         <td>{a.prezime}</td>
@@ -164,6 +228,17 @@ return (
   </tbody>
 </Table>
 
-  </>
-)
+{/* PAGINACIJA NA DNU */}
+{analiticar && analiticar.length > 0 && (
+  <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+    <Pagination size="lg">
+      <Pagination.Prev onClick={smanjiStranicu} disabled={stranica === 1} />
+      <Pagination.Item active>{stranica}</Pagination.Item>
+      <Pagination.Next onClick={povecajStranicu} disabled={stranica === ukupnoStranica} />
+    </Pagination>
+  </div>
+)}
+</>
+);
 }
+

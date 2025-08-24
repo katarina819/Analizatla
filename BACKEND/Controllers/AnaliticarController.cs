@@ -203,6 +203,87 @@ namespace BACKEND.Controller
         }
 
 
+        // GET api/v1/Analiticar/trazi/{uvjet}
+        [HttpGet("trazi/{uvjet}")]
+        public async Task<IActionResult> TraziAnaliticara(string uvjet)
+        {
+            if (string.IsNullOrWhiteSpace(uvjet) || uvjet.Length < 3)
+                return BadRequest("Uvjet mora imati barem 3 znaka");
+
+            uvjet = uvjet.ToLower();
+
+            try
+            {
+                var query = _context.Analiticari.AsQueryable();
+
+                foreach (var s in uvjet.Split(" "))
+                {
+                    query = query.Where(a => a.Ime.ToLower().Contains(s) || a.Prezime.ToLower().Contains(s));
+                }
+
+                var lista = await query
+                    .Select(a => new AnaliticarDTO
+                    {
+                        Sifra = a.Sifra,
+                        Ime = a.Ime,
+                        Prezime = a.Prezime,
+                        Kontakt = a.Kontakt,
+                        StrucnaSprema = a.StrucnaSprema,
+                        SlikaUrl = a.SlikaUrl
+                    })
+                    .ToListAsync();
+
+                return Ok(lista);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { poruka = e.Message });
+            }
+        }
+
+        // GET api/v1/Analiticar/traziStranicenje/{stranica}?uvjet=...
+        [HttpGet("traziStranicenje/{stranica}")]
+        public async Task<IActionResult> TraziAnaliticaraStranicenje(int stranica, string uvjet = "")
+        {
+            int poStranici = 4;
+            uvjet = uvjet.ToLower();
+
+            try
+            {
+                var query = _context.Analiticari.AsQueryable();
+
+                foreach (var s in uvjet.Split(" "))
+                {
+                    query = query.Where(a => a.Ime.ToLower().Contains(s) || a.Prezime.ToLower().Contains(s));
+                }
+
+                var ukupno = await query.CountAsync(); // ukupno rezultata
+                var ukupnoStranica = (int)Math.Ceiling((double)ukupno / poStranici);
+
+                var lista = await query
+                    .OrderBy(a => a.Prezime)
+                    .Skip((poStranici * (stranica - 1)))
+                    .Take(poStranici)
+                    .Select(a => new AnaliticarDTO
+                    {
+                        Sifra = a.Sifra,
+                        Ime = a.Ime,
+                        Prezime = a.Prezime,
+                        Kontakt = a.Kontakt,
+                        StrucnaSprema = a.StrucnaSprema,
+                        SlikaUrl = a.SlikaUrl
+                    })
+                    .ToListAsync();
+
+                return Ok(new { lista, ukupnoStranica });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { poruka = e.Message });
+            }
+        }
+
+
     }
 }
     
