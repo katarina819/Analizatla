@@ -29,8 +29,9 @@ lozinka varchar(200) not null
 );
 
 -- Lozinka edunova generirana pomoću https://bcrypt-generator.com/
-insert into operateri values ('edunova@edunova.hr',
-'$2a$12$ikGB2OIhVuf/wP8EmsiUNe0EXgI258LHS4dDjbJT.jALR8WPz3RlW');
+UPDATE dbo.operateri
+SET lozinka = '$2a$12$LWXu693Ai/B5UiQbAxE/beCYN3JQi3jh9sFy05NYz6jkcIuStMYPu'
+WHERE email = 'katarina@edunova.hr';
 
 
 

@@ -24,6 +24,8 @@ namespace BACKEND.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Operater>().ToTable("operateri");
+
             // Lokacija 1 - N UzorakTla
             modelBuilder.Entity<Uzorcitla>()
                 .HasOne(u => u.Lokacija)

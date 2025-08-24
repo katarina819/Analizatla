@@ -2,6 +2,7 @@ using BACKEND.Data;
 using BACKEND.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using EdunovaApp.Models.DTO;
 
 namespace BACKEND.Controller
 {
@@ -15,6 +16,26 @@ namespace BACKEND.Controller
         {
             _context = context;
         }
+
+
+        [HttpGet("graf")]
+        public async Task<ActionResult<IEnumerable<GrafUzorcitlaDTO>>> GetGrafPodaci()
+        {
+                        var podaci = await _context.UzorciTla
+                .Include(u => u.Lokacija)
+                .Include(u => u.Analize)
+                .Select(u => new GrafUzorcitlaDTO(
+                    u.Lokacija.MjestoUzorkovanja,                     // naziv lokacije
+                    u.Datum,                              // datum uzorka
+                    u.Analize.OrderBy(a => a.Datum).FirstOrDefault().Datum   // prvi datum analize, nullable
+                ))
+                .ToListAsync();
+
+
+            return Ok(podaci);
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Get()

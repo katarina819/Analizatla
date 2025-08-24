@@ -1,4 +1,8 @@
 namespace EdunovaApp.Models.DTO
 {
-    public record GrafGrupaDTO(string NazivGrupe, int UkupnoPolaznika);
+    public record GrafUzorcitlaDTO(
+        string MjestoUzorkovanja,
+        DateTime? Datum,
+        DateTime? DatumUzorka
+    );
 }

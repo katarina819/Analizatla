@@ -18,8 +18,14 @@ export const RouteNames = {
     ANALIZA_NOVI: '/analiza/dodaj',
     ANALIZA_PROMJENA: '/analiza/:sifra', 
 
+    LOGIN: '/login',
+    NADZORNA_PLOCA: '/nadzornaploca',
+    ERA: '/era'
+
 
 }
 
+// constants.js
+export const BACKEND_URL = 'https://localhost:7099';
 
 export const PRODUKCIJA = 'https://katarina0-001-site1.rtempurl.com'; 

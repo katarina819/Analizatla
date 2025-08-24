@@ -1,8 +1,12 @@
 using BACKEND.Data;
+using BACKEND.DTOs;
 using BACKEND.Models;
+using BACKEND.Models.DTO;
+using BACKEND.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+
 
 namespace BACKEND.Controller
 {
@@ -12,49 +16,74 @@ namespace BACKEND.Controller
     public class AnaliticarController : ControllerBase
     {
         private readonly EdunovaContext _context;
+        private readonly SlikaService _slikaService;
 
-        public AnaliticarController(EdunovaContext context)
+
+        public AnaliticarController(EdunovaContext context, SlikaService slikaService)
         {
             _context = context;
+            _slikaService = slikaService;
+
         }
 
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return Ok(_context.Analiticari.ToList());
+                var lista = await _context.Analiticari
+                    .Select(a => new AnaliticarDTO
+                    {
+                        Sifra = a.Sifra,
+                        Ime = a.Ime,
+                        Prezime = a.Prezime,
+                        Kontakt = a.Kontakt,
+                        StrucnaSprema = a.StrucnaSprema,
+                        SlikaUrl = a.SlikaUrl
+                    })
+                    .ToListAsync();
 
+                return Ok(lista);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
 
         [HttpGet("{sifra:int}")]
-        public IActionResult Get(int sifra)
+        public async Task<IActionResult> Get(int sifra)
         {
             if (sifra <= 0)
-            {
                 return BadRequest("Šifra nije dobra");
-            }
+
             try
             {
-                var analiticar = _context.Analiticari.Find(sifra);
-                if (analiticar == null)
-                {
-                    return NotFound();
-                }
-                return Ok(analiticar);
+                var analiticar = await _context.Analiticari
+                    .Where(a => a.Sifra == sifra)
+                    .Select(a => new AnaliticarDTO
+                    {
+                        Sifra = a.Sifra,
+                        Ime = a.Ime,
+                        Prezime = a.Prezime,
+                        Kontakt = a.Kontakt,
+                        StrucnaSprema = a.StrucnaSprema,
+                        SlikaUrl = a.SlikaUrl
+                    })
+                    .FirstOrDefaultAsync();
 
+                if (analiticar == null)
+                    return NotFound();
+
+                return Ok(analiticar);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
+
 
 
         [HttpPost]
@@ -151,6 +180,28 @@ namespace BACKEND.Controller
                 return BadRequest(new { poruka = $"Dogodila se neoèekivana greška: {ex.Message}" });
             }
         }
+
+
+        [HttpPost("{sifra}/slika")]
+        public async Task<IActionResult> DodajSliku(int sifra, [FromBody] SlikaDTO dto)
+        {
+            var analiticar = await _context.Analiticari.FindAsync(sifra);
+            if (analiticar == null)
+                return NotFound("Analitièar ne postoji");
+
+            var fileName = $"{sifra}.jpg";
+
+            // Ruèna instanca SlikaService
+            var slikaService = new SlikaService(this.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>());
+            var slikaUrl = slikaService.SpremiSliku(dto.Base64, fileName);
+
+            analiticar.SlikaUrl = slikaUrl;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { poruka = "Slika spremljena", slikaUrl });
+        }
+
 
     }
 }
