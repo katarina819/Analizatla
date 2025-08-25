@@ -5,8 +5,14 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BACKEND.Mapping
 {
+    /// <summary>
+    /// AutoMapper profil koji definira mapiranja izmeðu entiteta i DTO objekata u backendu.
+    /// </summary>
     public class BackendMappingProfile : Profile
     {
+        /// <summary>
+        /// Konstruktor koji postavlja sva mapiranja izmeðu entiteta i DTO-eva.
+        /// </summary>
         public BackendMappingProfile()
         {
             // Analiza -> AnalizaDto

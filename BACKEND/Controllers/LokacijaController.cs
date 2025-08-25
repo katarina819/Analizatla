@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace BACKEND.Controller
 {
+    /// <summary>
+    /// API kontroler za rad s entitetom <see cref="Lokacija"/>.
+    /// Omogućuje dohvat, unos, izmjenu i brisanje lokacija.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
 
@@ -13,12 +17,19 @@ namespace BACKEND.Controller
     {
         private readonly EdunovaContext _context;
 
+        /// <summary>
+        /// Konstruktor kontrolera koji prima DbContext.
+        /// </summary>
+        /// <param name="context">Instanca <see cref="EdunovaContext"/> za pristup bazi podataka.</param>
         public LokacijaController(EdunovaContext context)
         {
             _context = context;
         }
 
-
+        /// <summary>
+        /// Dohvaća sve lokacije.
+        /// </summary>
+        /// <returns>Lista svih entiteta <see cref="Lokacija"/>.</returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -33,6 +44,11 @@ namespace BACKEND.Controller
             }
         }
 
+        /// <summary>
+        /// Dohvaća lokaciju po šifri.
+        /// </summary>
+        /// <param name="sifra">Šifra lokacije.</param>
+        /// <returns>Entitet <see cref="Lokacija"/> ili NotFound ako lokacija ne postoji.</returns>
         [HttpGet("{sifra:int}")]
         public IActionResult Get(int sifra)
         {
@@ -57,7 +73,11 @@ namespace BACKEND.Controller
         }
 
 
-
+        /// <summary>
+        /// Dodaje novu lokaciju.
+        /// </summary>
+        /// <param name="lokacija">Entitet <see cref="Lokacija"/> koji se dodaje.</param>
+        /// <returns>201 Created sa podacima unosa ili BadRequest u slučaju greške.</returns>
         [HttpPost]
 
         public IActionResult Post(Lokacija lokacija)
@@ -83,6 +103,12 @@ namespace BACKEND.Controller
 
         }
 
+        /// <summary>
+        /// Ažurira postojeću lokaciju.
+        /// </summary>
+        /// <param name="sifra">Šifra lokacije koja se ažurira.</param>
+        /// <param name="lokacija">Entitet <see cref="Lokacija"/> s novim podacima.</param>
+        /// <returns>Ok sa ažuriranim entitetom, NotFound ili BadRequest u slučaju greške.</returns>
         [HttpPut("{sifra:int}")]
         public IActionResult Put(int sifra, Lokacija lokacija)
         {
@@ -112,6 +138,11 @@ namespace BACKEND.Controller
             }
         }
 
+        /// <summary>
+        /// Briše lokaciju iz baze.
+        /// </summary>
+        /// <param name="sifra">Šifra lokacije koja se briše.</param>
+        /// <returns>Ok poruka ako je uspješno, NotFound ili BadRequest u slučaju greške.</returns>
         [HttpDelete("{sifra:int}")]
         public async Task<IActionResult> Delete(int sifra)
         {

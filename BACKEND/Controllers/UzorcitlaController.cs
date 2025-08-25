@@ -6,18 +6,29 @@ using EdunovaApp.Models.DTO;
 
 namespace BACKEND.Controller
 {
+    /// <summary>
+    /// API kontroler za rad s uzorcima tla.
+    /// Omoguæuje dohvat, unos, izmjenu i brisanje uzoraka te dohvat podataka za grafove.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class UzorcitlaController : ControllerBase
     {
         private readonly EdunovaContext _context;
 
+        /// <summary>
+        /// Konstruktor kontrolera koji prima DbContext.
+        /// </summary>
+        /// <param name="context">Instanca <see cref="EdunovaContext"/> za pristup bazi podataka.</param>
         public UzorcitlaController(EdunovaContext context)
         {
             _context = context;
         }
 
-
+        /// <summary>
+        /// Dohvaæa podatke za graf prikaza uzoraka tla.
+        /// </summary>
+        /// <returns>Lista DTO objekata <see cref="GrafUzorcitlaDTO"/> s nazivom lokacije, datumom uzorka i datumom prve analize.</returns>
         [HttpGet("graf")]
         public async Task<ActionResult<IEnumerable<GrafUzorcitlaDTO>>> GetGrafPodaci()
         {
@@ -36,7 +47,10 @@ namespace BACKEND.Controller
         }
 
 
-
+        /// <summary>
+        /// Dohvaæa sve uzorke tla.
+        /// </summary>
+        /// <returns>Lista DTO objekata <see cref="UzorcitlaDto"/> s podacima o uzorcima.</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -62,6 +76,11 @@ namespace BACKEND.Controller
             }
         }
 
+        /// <summary>
+        /// Dohvaæa jedan uzorak tla po šifri.
+        /// </summary>
+        /// <param name="sifra">Šifra uzorka.</param>
+        /// <returns>DTO objekt <see cref="UzorcitlaDto"/> ili NotFound ako uzorak ne postoji.</returns>
         [HttpGet("{sifra:int}")]
         public async Task<IActionResult> Get(int sifra)
         {
@@ -92,6 +111,11 @@ namespace BACKEND.Controller
             }
         }
 
+        /// <summary>
+        /// Dodaje novi uzorak tla u bazu.
+        /// </summary>
+        /// <param name="dto">DTO objekt <see cref="UzorcitlaDto"/> s podacima o uzorku.</param>
+        /// <returns>CreatedAtAction s podacima unesenog uzorka ili BadRequest ako postoji greška.</returns>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] UzorcitlaDto dto)
         {
@@ -125,7 +149,12 @@ namespace BACKEND.Controller
             }
         }
 
-
+        /// <summary>
+        /// Ažurira postojeæi uzorak tla.
+        /// </summary>
+        /// <param name="sifra">Šifra uzorka koji se ažurira.</param>
+        /// <param name="dto">DTO objekt <see cref="UzorcitlaDto"/> s novim podacima.</param>
+        /// <returns>NoContent ako je uspješno, NotFound ili BadRequest u sluèaju greške.</returns>
         [HttpPut("{sifra:int}")]
         public async Task<IActionResult> Put(int sifra, [FromBody] UzorcitlaDto dto)
         {
@@ -158,7 +187,11 @@ namespace BACKEND.Controller
             }
         }
 
-
+        /// <summary>
+        /// Briše uzorak tla iz baze.
+        /// </summary>
+        /// <param name="sifra">Šifra uzorka koji se briše.</param>
+        /// <returns>Ok poruka ako je uspješno, BadRequest ili NotFound u sluèaju greške.</returns>
         [HttpDelete("{sifra:int}")]
         public async Task<IActionResult> Delete(int sifra)
         {

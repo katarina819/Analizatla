@@ -9,17 +9,29 @@ using AutoMapper;
 
 namespace BACKEND.Controllers
 {
+    /// <summary>
+    /// Kontroler za upravljanje analizama tla.
+    /// Omoguæuje CRUD operacije nad analizama, ukljuèujuæi dohvat, dodavanje, ažuriranje i brisanje.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class AnalizaController : ControllerBase
     {
         private readonly EdunovaContext _context;
 
+        /// <summary>
+        /// Konstruktor kontrolera.
+        /// </summary>
+        /// <param name="context">Instanca <see cref="EdunovaContext"/> za pristup bazi podataka.</param>
         public AnalizaController(EdunovaContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Dohvaæa sve analize iz baze.
+        /// </summary>
+        /// <returns>Lista svih analiza s pripadajuæim uzorcima tla i analitièarima.</returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -60,6 +72,11 @@ namespace BACKEND.Controllers
             }
         }
 
+        /// <summary>
+        /// Dohvaæa analizu po šifri.
+        /// </summary>
+        /// <param name="sifra">Jedinstvena šifra analize.</param>
+        /// <returns>Objekt <see cref="AnalizaDto"/> ako postoji, 404 NotFound inaèe.</returns>
         [HttpGet("{sifra:int}")]
         public IActionResult Get(int sifra)
         {
@@ -108,6 +125,11 @@ namespace BACKEND.Controllers
             }
         }
 
+        /// <summary>
+        /// Dodaje novu analizu u bazu.
+        /// </summary>
+        /// <param name="dto">DTO objekt <see cref="AnalizaCreateUpdateDto"/> s podacima za kreiranje analize.</param>
+        /// <returns>Stvoreni objekt <see cref="AnalizaDto"/> s HTTP status 201 Created.</returns>
         [HttpPost]
         public IActionResult Post([FromBody] AnalizaCreateUpdateDto dto)
         {
@@ -178,7 +200,12 @@ namespace BACKEND.Controllers
 
 
 
-
+        /// <summary>
+        /// Ažurira postojeæu analizu.
+        /// </summary>
+        /// <param name="sifra">Šifra analize koja se ažurira.</param>
+        /// <param name="dto">DTO objekt <see cref="AnalizaCreateUpdateDto"/> s novim podacima.</param>
+        /// <returns>HTTP 204 NoContent ako je uspješno ažurirano.</returns>
         // PUT: ažuriranje postojeæe analize
         [HttpPut("{sifra:int}")]
         public IActionResult Put(int sifra, [FromBody] AnalizaCreateUpdateDto dto)
@@ -218,7 +245,11 @@ namespace BACKEND.Controllers
         }
 
 
-
+        /// <summary>
+        /// Briše analizu po šifri.
+        /// </summary>
+        /// <param name="sifra">Šifra analize koja se briše.</param>
+        /// <returns>Poruka o uspjehu ili neuspjehu brisanja.</returns>
         // DELETE: brisanje analize
         [HttpDelete("{sifra:int}")]
         public IActionResult Delete(int sifra)

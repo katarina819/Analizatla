@@ -9,19 +9,31 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BACKEND.Controllers
 {
+    /// <summary>
+    /// Kontroler za autentikaciju i autorizaciju operatera.
+    /// Omoguæuje generiranje JWT tokena na temelju vjerodajnica.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class AutorizacijaController : ControllerBase
     {
         private readonly EdunovaContext _context;
 
+        /// <summary>
+        /// Konstruktor kontrolera.
+        /// </summary>
+        /// <param name="context">Instanca <see cref="EdunovaContext"/> za pristup bazi podataka.</param>
         public AutorizacijaController(EdunovaContext context)
         {
             _context = context;
         }
 
 
-
+        /// <summary>
+        /// Generira JWT token za prijavljenog operatera.
+        /// </summary>
+        /// <param name="operater">DTO objekt <see cref="OperaterDTO"/> koji sadrži email i lozinku operatera.</param>
+        /// <returns>JWT token kao string ako su vjerodajnice ispravne, 403 Forbidden ako nije autoriziran, 500 InternalServerError u sluèaju problema s bazom.</returns>
         [HttpPost("token")]
         public IActionResult GenerirajToken(OperaterDTO operater)
         {

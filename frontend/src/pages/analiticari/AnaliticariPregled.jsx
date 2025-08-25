@@ -84,7 +84,7 @@ function handleFileChange(event, id) {
   const file = event.target.files[0];
   const reader = new FileReader();
   reader.onloadend = () => {
-    const base64String = reader.result.split(",")[1]; // ukloni data:image/...;Base64,
+    const base64String = reader.result.split(",")[1]; 
     promijeniSliku(id, base64String);
   };
   reader.readAsDataURL(file);
@@ -149,13 +149,7 @@ return (
                 <Col key={2} sm={12} lg={4} md={4}>
                     {analiticar && analiticar.length > 0 && (
                             <div style={{ display: "flex", justifyContent: "center" }}>
-                               {/*  <Pagination size="lg">
-                                <Pagination.Prev onClick={smanjiStranicu} />
-                                <Pagination.Item disabled>{stranica}</Pagination.Item> 
-                                <Pagination.Next
-                                    onClick={povecajStranicu}
-                                />
-                            </Pagination> */}
+                               
                         </div>
                     )}
                 </Col>

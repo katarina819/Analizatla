@@ -10,6 +10,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace BACKEND.Controller
 {
+    /// <summary>
+    /// Kontroler za upravljanje analitièarima.
+    /// Omoguæuje CRUD operacije, dodavanje slike, pretraživanje i paginaciju.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
 
@@ -18,7 +22,11 @@ namespace BACKEND.Controller
         private readonly EdunovaContext _context;
         private readonly SlikaService _slikaService;
 
-
+        /// <summary>
+        /// Konstruktor kontrolera.
+        /// </summary>
+        /// <param name="context">Instanca <see cref="EdunovaContext"/> za pristup bazi podataka.</param>
+        /// <param name="slikaService">Instanca <see cref="SlikaService"/> za upravljanje slikama.</param>
         public AnaliticarController(EdunovaContext context, SlikaService slikaService)
         {
             _context = context;
@@ -26,7 +34,10 @@ namespace BACKEND.Controller
 
         }
 
-
+        /// <summary>
+        /// Dohvaæa sve analitièare.
+        /// </summary>
+        /// <returns>Lista svih analitièara u obliku <see cref="AnaliticarDTO"/>.</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -52,6 +63,11 @@ namespace BACKEND.Controller
             }
         }
 
+        /// <summary>
+        /// Dohvaæa analitièara po šifri.
+        /// </summary>
+        /// <param name="sifra">Jedinstvena šifra analitièara.</param>
+        /// <returns>Objekt <see cref="AnaliticarDTO"/> ako postoji, 404 NotFound inaèe.</returns>
         [HttpGet("{sifra:int}")]
         public async Task<IActionResult> Get(int sifra)
         {
@@ -85,7 +101,11 @@ namespace BACKEND.Controller
         }
 
 
-
+        /// <summary>
+        /// Dodaje novog analitièara u bazu.
+        /// </summary>
+        /// <param name="analiticar">Objekt <see cref="Analiticar"/> s podacima za kreiranje.</param>
+        /// <returns>Stvoreni objekt <see cref="Analiticar"/> s HTTP status 201 Created.</returns>
         [HttpPost]
 
         public IActionResult Post(Analiticar analiticar)
@@ -111,7 +131,12 @@ namespace BACKEND.Controller
 
         }
 
-
+        /// <summary>
+        /// Ažurira postojeæeg analitièara.
+        /// </summary>
+        /// <param name="sifra">Šifra analitièara koji se ažurira.</param>
+        /// <param name="analiticar">Objekt <see cref="Analiticar"/> s novim podacima.</param>
+        /// <returns>HTTP 200 OK ako je uspješno ažurirano, 404 ako ne postoji.</returns>
         [HttpPut("{sifra:int}")]
         public IActionResult Put(int sifra, Analiticar analiticar)
         {
@@ -144,7 +169,11 @@ namespace BACKEND.Controller
             }
         }
 
-
+        /// <summary>
+        /// Briše analitièara po šifri.
+        /// </summary>
+        /// <param name="sifra">Šifra analitièara koji se briše.</param>
+        /// <returns>Poruka o uspjehu ili neuspjehu brisanja.</returns>
         [HttpDelete("{sifra:int}")]
         public IActionResult Delete(int sifra)
         {
@@ -181,7 +210,12 @@ namespace BACKEND.Controller
             }
         }
 
-
+        /// <summary>
+        /// Dodaje sliku analitièaru.
+        /// </summary>
+        /// <param name="sifra">Šifra analitièara.</param>
+        /// <param name="dto">DTO objekt <see cref="SlikaDTO"/> s Base64 podacima slike.</param>
+        /// <returns>Poruka i URL spremljene slike.</returns>
         [HttpPost("{sifra}/slika")]
         public async Task<IActionResult> DodajSliku(int sifra, [FromBody] SlikaDTO dto)
         {
@@ -202,7 +236,11 @@ namespace BACKEND.Controller
             return Ok(new { poruka = "Slika spremljena", slikaUrl });
         }
 
-
+        /// <summary>
+        /// Pretražuje analitièare po imenu ili prezimenu.
+        /// </summary>
+        /// <param name="uvjet">Uvjet za pretraživanje (barem 3 znaka).</param>
+        /// <returns>Lista <see cref="AnaliticarDTO"/> koji zadovoljavaju uvjet pretraživanja.</returns>
         // GET api/v1/Analiticar/trazi/{uvjet}
         [HttpGet("trazi/{uvjet}")]
         public async Task<IActionResult> TraziAnaliticara(string uvjet)
@@ -241,6 +279,13 @@ namespace BACKEND.Controller
             }
         }
 
+
+        /// <summary>
+        /// Pretražuje analitièare s podrškom za paginaciju.
+        /// </summary>
+        /// <param name="stranica">Broj stranice koju želimo dohvatiti.</param>
+        /// <param name="uvjet">Opcionalni uvjet za pretraživanje.</param>
+        /// <returns>Objekt s listom rezultata i ukupnim brojem stranica.</returns>
         // GET api/v1/Analiticar/traziStranicenje/{stranica}?uvjet=...
         [HttpGet("traziStranicenje/{stranica}")]
         public async Task<IActionResult> TraziAnaliticaraStranicenje(int stranica, string uvjet = "")
