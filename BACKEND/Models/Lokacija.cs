@@ -23,6 +23,8 @@ namespace BACKEND.Models
         [JsonIgnore]
         public ICollection<Uzorcitla>? UzorciTla { get; set; }
 
+      
+
     }
 }
 

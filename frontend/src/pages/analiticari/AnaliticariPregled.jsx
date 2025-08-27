@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { BACKEND_URL } from "../../constants";
 import useLoading from "../../hooks/useLoading";
 import { Col, Form, Pagination } from "react-bootstrap";
+import { PRODUKCIJA } from "../../constants";
 
 
 export default function AnaliticariPregled () {
@@ -58,18 +59,22 @@ export default function AnaliticariPregled () {
         }
 
     async function promijeniSliku(id, base64String) {
-    try {
-    const response = await fetch(`${BACKEND_URL}/api/v1/analiticar/${id}/slika`, {
+  try {
+    // Odredi bazni URL
+    const BASE_URL =
+      window.location.hostname === "localhost" ? BACKEND_URL : PRODUKCIJA;
+
+    const response = await fetch(`${BASE_URL}/api/v1/analiticar/${id}/slika`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ base64: base64String }) // mora biti 'base64', ne 'Base64'
+      body: JSON.stringify({ base64: base64String }) // mora biti 'base64'
     });
 
     const data = await response.json();
 
     if (response.ok) {
       toast.success("Slika uspješno promijenjena!");
-      dohvatiAnaliticari();
+      dohvatiAnaliticari(); // poziva refresh liste
     } else {
       toast.error(data.poruka || "Greška pri promjeni slike");
     }
@@ -78,6 +83,7 @@ export default function AnaliticariPregled () {
     toast.error("Neočekivana greška prilikom slanja slike");
   }
 }
+
 
 
 function handleFileChange(event, id) {
@@ -180,11 +186,12 @@ return (
       <tr key={index}>
         <td>
           {a.slikaUrl ? (
-            <img 
-              src={a.slikaUrl ? `${BACKEND_URL}${a.slikaUrl}` : '/default-avatar.png'} 
-              alt={`${a.ime} ${a.prezime}`} 
-              style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "50%" }}
-            />
+            <img
+            src={a.slikaUrl ? `${window.location.hostname === 'localhost' ? BACKEND_URL : PRODUKCIJA}${a.slikaUrl}` : '/default-avatar.png'}
+            alt={a.ime && a.prezime ? `${a.ime} ${a.prezime}` : "Avatar"}
+            style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "50%" }}
+          />
+
           ) : (
             <span>Nema slike</span>
           )}

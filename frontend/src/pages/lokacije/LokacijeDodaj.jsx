@@ -1,71 +1,47 @@
-import { Button, Col, Form, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { RouteNames } from "../../constants";
-import LokacijeService from "../../services/LokacijeService";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Row, Col } from "react-bootstrap";
+import LokacijeService from "../../services/LokacijeService"; // provjeri putanju
 
 export default function LokacijeDodaj() {
+  const [unos, setUnos] = useState("");
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  async function dodajLokaciju() {
+    if (!unos) return;
 
-    async function dodaj(lokacija) {
+    // 1. Dodaj lokaciju u backend
+    await LokacijeService.dodaj({ mjestoUzorkovanja: unos });
 
-        const odgovor = await LokacijeService.dodaj(lokacija);
-        navigate(RouteNames.SMJER_PREGLED);
-        
-    }
+    // 2. Nakon dodavanja idi na nadzornu ploču
+    navigate("/nadzornaploca");
+  }
 
+  function odradiSubmit(e) {
+    e.preventDefault();
+    dodajLokaciju();
+  }
 
-    function odradiSubmit (e) {
-        e.preventDefault();
+  return (
+    <Form onSubmit={odradiSubmit} style={{ marginBottom: "20px" }}>
+      <Form.Group controlId="mjestoUzorkovanja">
+        <Form.Label>Naziv lokacije</Form.Label>
+        <Form.Control
+          type="text"
+          value={unos}
+          onChange={(e) => setUnos(e.target.value)}
+          placeholder="Unesite naziv mjesta"
+          required
+        />
+      </Form.Group>
 
-        let podaci = new FormData(e.target);
-
-        dodaj(
-            {
-                mjestoUzorkovanja: podaci.get('mjestoUzorkovanja')
-            }
-
-
-        )
-    }
-
-
-
-    return (
-        <>
-
-        Dodavanje lokacije
-        <Form onSubmit={odradiSubmit}>
-
-            <Form.Group controlId="mjestoUzorkovanja">
-                <Form.Label>Naziv lokacije</Form.Label>
-                <Form.Control type="text" name="mjestoUzorkovanja" required />
-            </Form.Group>
-
-            <hr style={{marginTop: '50px'}} />
-
-            <Row>
-                <Col xs={6} sm={6} md={3} lg={2} xl={6} xxl={6}>
-                    <Link to={RouteNames.SMJER_PREGLED}
-                    className="btn btn-danger">Odustani</Link>
-                </Col>
-                <Col xs={6} sm={6} md={9} lg={10} xl={6} xxl={6}>
-                    <Button variant="success" type="submit">
-                        Dodaj lokaciju
-                    </Button>
-                </Col>
-
-
-            </Row>
-
-        </Form>
-
-        
-        
-
-
-
-        </>
-    )
+      <Row style={{ marginTop: "10px" }}>
+        <Col>
+          <Button variant="success" type="submit">
+            Dodaj lokaciju
+          </Button>
+        </Col>
+      </Row>
+    </Form>
+  );
 }
