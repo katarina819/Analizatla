@@ -2,7 +2,7 @@ using BACKEND.Data;
 using BACKEND.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EdunovaApp.Models.DTO;
+//using EdunovaApp.Models.DTO;
 
 namespace BACKEND.Controller
 {
@@ -29,22 +29,22 @@ namespace BACKEND.Controller
         /// Dohvaæa podatke za graf prikaza uzoraka tla.
         /// </summary>
         /// <returns>Lista DTO objekata <see cref="GrafUzorcitlaDTO"/> s nazivom lokacije, datumom uzorka i datumom prve analize.</returns>
-        [HttpGet("graf")]
-        public async Task<ActionResult<IEnumerable<GrafUzorcitlaDTO>>> GetGrafPodaci()
-        {
-                        var podaci = await _context.UzorciTla
-                .Include(u => u.Lokacija)
-                .Include(u => u.Analize)
-                .Select(u => new GrafUzorcitlaDTO(
-                    u.Lokacija.MjestoUzorkovanja,                     // naziv lokacije
-                    u.Datum,                              // datum uzorka
-                    u.Analize.OrderBy(a => a.Datum).FirstOrDefault().Datum   // prvi datum analize, nullable
-                ))
-                .ToListAsync();
+        //[HttpGet("graf")]
+        //public async Task<ActionResult<IEnumerable<GrafUzorcitlaDTO>>> GetGrafPodaci()
+        //{
+        //                var podaci = await _context.UzorciTla
+        //        .Include(u => u.Lokacija)
+        //        .Include(u => u.Analize)
+        //        .Select(u => new GrafUzorcitlaDTO(
+        //            u.Lokacija.MjestoUzorkovanja,                     // naziv lokacije
+        //            u.Datum,                              // datum uzorka
+        //            u.Analize.OrderBy(a => a.Datum).FirstOrDefault().Datum   // prvi datum analize, nullable
+        //        ))
+        //        .ToListAsync();
 
 
-            return Ok(podaci);
-        }
+        //    return Ok(podaci);
+        //}
 
 
         /// <summary>

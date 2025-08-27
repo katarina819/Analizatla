@@ -35,7 +35,7 @@ async function getBySifra(sifra) {
 
 async function dodaj(lokacija) {
   return await HttpService.post('/Lokacija', lokacija)
-    .then((odgovor) => odgovor.data) // vraća kreiranu lokaciju s 'sifra'
+    .then((odgovor) => odgovor.data) 
     .catch((e) => null);
 }
 

@@ -42,9 +42,7 @@ export default function UzorcitlaPromjeni() {
                 datum: podaci.get('datum'),
                 mjestoUzorkovanja: podaci.get('lokacija')
             }
-            
-
-
+        
         )
     }
 
@@ -103,11 +101,6 @@ export default function UzorcitlaPromjeni() {
             </Row>
 
         </Form>
-
-        
-        
-
-
 
         </>
     )

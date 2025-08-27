@@ -89,18 +89,18 @@ app.UseSwaggerUI(options =>
 
 app.MapControllers();
 
-app.MapGet("/test-operateri", async (EdunovaContext db) =>
-{
-    try
-    {
-        var count = await db.Operateri.CountAsync();
-        return Results.Ok($"Operateri count: {count}");
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem($"Greška pri dohvaæanju tablice: {ex.Message}");
-    }
-});
+//app.MapGet("/test-operateri", async (EdunovaContext db) =>
+//{
+//    try
+//    {
+//        var count = await db.Operateri.CountAsync();
+//        return Results.Ok($"Operateri count: {count}");
+//    }
+//    catch (Exception ex)
+//    {
+//        return Results.Problem($"Greška pri dohvaæanju tablice: {ex.Message}");
+//    }
+//});
 
 app.UseDefaultFiles();
 app.MapFallbackToFile("index.html");

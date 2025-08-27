@@ -72,8 +72,6 @@ async function getStranicenje(stranica, uvjet) {
     }
 }
 
-
-
 export default {
     get,
     getBySifra,

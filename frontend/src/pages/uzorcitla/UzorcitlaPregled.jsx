@@ -4,7 +4,7 @@ import UzorcitlaService from "../../services/UzorcitlaService";
 import { Link, useNavigate } from "react-router-dom";
 import { RouteNames } from "../../constants";
 import { toast } from "react-toastify";
-// import UzorcitlaGraf from "./UzorcitlaGraf";
+
 
 
 export default function UzorcitlaPregled () {
@@ -104,9 +104,7 @@ export default function UzorcitlaPregled () {
              </tr>
            ))}
          </tbody>
-       </Table>
-       
-       {/* <UzorcitlaGraf /> */}
+       </Table> 
      </>
    )
    }

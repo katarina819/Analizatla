@@ -26,6 +26,7 @@ import ErrorModal from "./components/ErrorModal"
 import EraDijagram from './pages/EraDiagram'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {Navigate } from 'react-router-dom';
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -46,7 +47,8 @@ function App() {
         <NavBarEdunova />
         <Container className="app">
           <Routes>
-            <Route path={RouteNames.HOME} element={<Pocetna />} />
+             <Route path="/" element={<Pocetna />} />
+            <Route path="/home" element={<Pocetna />} /> 
             {isLoggedIn ? (
               <>
                 <Route path={RouteNames.NADZORNA_PLOCA} element={<NadzornaPloca />} /> 

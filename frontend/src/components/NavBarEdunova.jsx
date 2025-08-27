@@ -17,14 +17,14 @@ export default function NavBarEdunova() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand className="ruka" onClick={() => navigate(RouteNames.HOME)}>
+        <Navbar.Brand className="ruka" onClick={() => navigate("/")}>
           Analiza tla
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-
-            <Nav.Link onClick={() => navigate(RouteNames.HOME)}>Početna</Nav.Link>
+            {/* Početna vodi na /home */}
+           <Nav.Link onClick={() => navigate("/home")}>Početna</Nav.Link>
 
             {isLoggedIn ? (
               <>

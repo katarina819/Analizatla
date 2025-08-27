@@ -71,7 +71,7 @@ const AnalizeGrid = () => {
   const fetchAnalize = async () => {
     try {
       const res = await AnalizeService.get(); 
-      console.log("Podaci sa servera:", res); // <--- Ovdje vidiš što vraća backend
+      console.log("Podaci sa servera:", res); // Ovdje se vidi što vraća backend
       setAnalize(res || []);
       setLoading(false);
     } catch (err) {
