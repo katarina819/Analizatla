@@ -11,7 +11,7 @@ namespace BACKEND.Controllers
 {
     /// <summary>
     /// Kontroler za autentikaciju i autorizaciju operatera.
-    /// Omoguæuje generiranje JWT tokena na temelju vjerodajnica.
+    /// Omoguï¿½uje generiranje JWT tokena na temelju vjerodajnica.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -32,19 +32,19 @@ namespace BACKEND.Controllers
         /// <summary>
         /// Generira JWT token za prijavljenog operatera.
         /// </summary>
-        /// <param name="operater">DTO objekt <see cref="OperaterDTO"/> koji sadrži email i lozinku operatera.</param>
-        /// <returns>JWT token kao string ako su vjerodajnice ispravne, 403 Forbidden ako nije autoriziran, 500 InternalServerError u sluèaju problema s bazom.</returns>
+        /// <param name="operater">DTO objekt <see cref="OperaterDTO"/> koji sadrï¿½i email i lozinku operatera.</param>
+        /// <returns>JWT token kao string ako su vjerodajnice ispravne, 403 Forbidden ako nije autoriziran, 500 InternalServerError u sluï¿½aju problema s bazom.</returns>
         [HttpPost("token")]
         public IActionResult GenerirajToken(OperaterDTO operater)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // TEST: provjera može li EF dohvatiti tablicu
+            // TEST: provjera moï¿½e li EF dohvatiti tablicu
             try
             {
                 var test = _context.Operateri
-                    .FromSqlRaw("SELECT TOP 1 * FROM dbo.operateri")
+                    .FromSqlRaw("SELECT * FROM operateri LIMIT 1")
                     .FirstOrDefault();
 
                 if (test == null)
@@ -52,7 +52,7 @@ namespace BACKEND.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Greška pri dohvaæanju tablice: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Greï¿½ka pri dohvaï¿½anju tablice: {ex.Message}");
             }
 
             // Normalni dohvat po emailu
@@ -61,7 +61,7 @@ namespace BACKEND.Controllers
                 .FirstOrDefault();
 
             if (operBaza == null)
-                return StatusCode(StatusCodes.Status403Forbidden, "Niste autorizirani, ne mogu naæi operatera");
+                return StatusCode(StatusCodes.Status403Forbidden, "Niste autorizirani, ne mogu naï¿½i operatera");
 
             Console.WriteLine("Unesena lozinka: " + operater.Password);
             Console.WriteLine("Hash iz baze: " + operBaza.Lozinka);
@@ -71,7 +71,7 @@ namespace BACKEND.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden, "Niste autorizirani, lozinka ne odgovara");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("MojKljucKojijeJakoTajan i dovoljno dugaèak da se može koristiti");
+            var key = Encoding.UTF8.GetBytes("MojKljucKojijeJakoTajan i dovoljno dugaï¿½ak da se moï¿½e koristiti");
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
