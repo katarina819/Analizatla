@@ -2,6 +2,7 @@ using BACKEND.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using BACKEND.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,9 +22,9 @@ builder.Services.AddControllers()
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<EdunovaContext>(o =>
+builder.Services.AddDbContext<EdunovaContext>(options =>
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("EdunovaContext"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddSingleton<SlikaService>();
@@ -98,7 +99,7 @@ app.MapControllers();
 //    }
 //    catch (Exception ex)
 //    {
-//        return Results.Problem($"Greška pri dohvaæanju tablice: {ex.Message}");
+//        return Results.Problem($"Greï¿½ka pri dohvaï¿½anju tablice: {ex.Message}");
 //    }
 //});
 
