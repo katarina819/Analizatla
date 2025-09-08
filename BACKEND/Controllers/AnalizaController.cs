@@ -11,7 +11,7 @@ namespace BACKEND.Controllers
 {
     /// <summary>
     /// Kontroler za upravljanje analizama tla.
-    /// Omoguæuje CRUD operacije nad analizama, ukljuèujuæi dohvat, dodavanje, ažuriranje i brisanje.
+    /// Omoguï¿½uje CRUD operacije nad analizama, ukljuï¿½ujuï¿½i dohvat, dodavanje, aï¿½uriranje i brisanje.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -29,9 +29,9 @@ namespace BACKEND.Controllers
         }
 
         /// <summary>
-        /// Dohvaæa sve analize iz baze.
+        /// Dohvaï¿½a sve analize iz baze.
         /// </summary>
-        /// <returns>Lista svih analiza s pripadajuæim uzorcima tla i analitièarima.</returns>
+        /// <returns>Lista svih analiza s pripadajuï¿½im uzorcima tla i analitiï¿½arima.</returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -73,15 +73,15 @@ namespace BACKEND.Controllers
         }
 
         /// <summary>
-        /// Dohvaæa analizu po šifri.
+        /// Dohvaï¿½a analizu po ï¿½ifri.
         /// </summary>
-        /// <param name="sifra">Jedinstvena šifra analize.</param>
-        /// <returns>Objekt <see cref="AnalizaDto"/> ako postoji, 404 NotFound inaèe.</returns>
+        /// <param name="sifra">Jedinstvena ï¿½ifra analize.</param>
+        /// <returns>Objekt <see cref="AnalizaDto"/> ako postoji, 404 NotFound inaï¿½e.</returns>
         [HttpGet("{sifra:int}")]
         public IActionResult Get(int sifra)
         {
             if (sifra <= 0)
-                return BadRequest("Šifra mora biti veæa od 0");
+                return BadRequest("ï¿½ifra mora biti veï¿½a od 0");
 
             try
             {
@@ -104,7 +104,7 @@ namespace BACKEND.Controllers
                     MasaUzorka = a.UzorakTla.MasaUzorka,
                     VrstaTla = a.UzorakTla.VrstaTla,
                     DatumUzorka = a.UzorakTla.Datum,
-                    MjestoUzorkovanja = a.UzorakTla.Lokacija.MjestoUzorkovanja, // <— ispravljeno
+                    MjestoUzorkovanja = a.UzorakTla.Lokacija.MjestoUzorkovanja, // <ï¿½ ispravljeno
 
                     Ime = a.Analiticar.Ime,
                     Prezime = a.Analiticar.Prezime,
@@ -169,7 +169,7 @@ namespace BACKEND.Controllers
                 _context.Analize.Add(analiza);
                 _context.SaveChanges();
 
-                // Vraæamo DTO
+                // Vraï¿½amo DTO
                 var result = new AnalizaDto
                 {
                     Sifra = analiza.Sifra,
@@ -201,12 +201,12 @@ namespace BACKEND.Controllers
 
 
         /// <summary>
-        /// Ažurira postojeæu analizu.
+        /// Aï¿½urira postojeï¿½u analizu.
         /// </summary>
-        /// <param name="sifra">Šifra analize koja se ažurira.</param>
+        /// <param name="sifra">ï¿½ifra analize koja se aï¿½urira.</param>
         /// <param name="dto">DTO objekt <see cref="AnalizaCreateUpdateDto"/> s novim podacima.</param>
-        /// <returns>HTTP 204 NoContent ako je uspješno ažurirano.</returns>
-        // PUT: ažuriranje postojeæe analize
+        /// <returns>HTTP 204 NoContent ako je uspjeï¿½no aï¿½urirano.</returns>
+        // PUT: aï¿½uriranje postojeï¿½e analize
         [HttpPut("{sifra:int}")]
         public IActionResult Put(int sifra, [FromBody] AnalizaCreateUpdateDto dto)
         {
@@ -246,16 +246,16 @@ namespace BACKEND.Controllers
 
 
         /// <summary>
-        /// Briše analizu po šifri.
+        /// Briï¿½e analizu po ï¿½ifri.
         /// </summary>
-        /// <param name="sifra">Šifra analize koja se briše.</param>
+        /// <param name="sifra">ï¿½ifra analize koja se briï¿½e.</param>
         /// <returns>Poruka o uspjehu ili neuspjehu brisanja.</returns>
         // DELETE: brisanje analize
         [HttpDelete("{sifra:int}")]
         public IActionResult Delete(int sifra)
         {
             if (sifra < 1)
-                return BadRequest(new { poruka = "Šifra mora biti veæa od 0" });
+                return BadRequest(new { poruka = "ï¿½ifra mora biti veï¿½a od 0" });
 
             try
             {
@@ -267,17 +267,17 @@ namespace BACKEND.Controllers
                 _context.SaveChanges();
 
                 // Ako brisanje uspije
-                return Ok(new { poruka = "Analiza je uspješno obrisana." });
+                return Ok(new { poruka = "Analiza je uspjeï¿½no obrisana." });
             }
             catch (DbUpdateException)
             {
-                // Ako postoji foreign key constraint koji sprjeèava brisanje
-                return BadRequest(new { poruka = "Ne možete obrisati ovu analizu jer je povezana s drugim podacima." });
+                // Ako postoji foreign key constraint koji sprjeï¿½ava brisanje
+                return BadRequest(new { poruka = "Ne moï¿½ete obrisati ovu analizu jer je povezana s drugim podacima." });
             }
             catch (Exception ex)
             {
-                // Ostale neoèekivane greške
-                return BadRequest(new { poruka = $"Dogodila se neoèekivana greška: {ex.Message}" });
+                // Ostale neoï¿½ekivane greï¿½ke
+                return BadRequest(new { poruka = $"Dogodila se neoï¿½ekivana greï¿½ka: {ex.Message}" });
             }
         }
 

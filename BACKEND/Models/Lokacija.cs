@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.HttpResults;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BACKEND.Models
 {
@@ -13,6 +13,8 @@ namespace BACKEND.Models
         /// <summary>
         /// Naziv mjesta uzorkovanja.
         /// </summary>
+
+        [Column("mjestouzorkovanja")]
         public string MjestoUzorkovanja { get; set; } = "";
 
         /// <summary>

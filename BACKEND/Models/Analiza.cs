@@ -13,6 +13,8 @@ namespace BACKEND.Models
         /// <summary>
         /// Datum kada je analiza izvršena. Može biti null.
         /// </summary>
+
+        [Column("datum")]
         public DateTime? Datum { get; set; }
 
         /// <summary>
@@ -42,6 +44,8 @@ namespace BACKEND.Models
         /// <summary>
         /// pH vrijednost tla.
         /// </summary>
+
+        [Column("pHvrijednost")]
         public decimal pHVrijednost { get; set; }
 
         /// <summary>

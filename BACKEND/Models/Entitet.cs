@@ -1,17 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BACKEND.Models
 {
     /// <summary>
     /// Apstraktna baza za sve entitete u sustavu.
-    /// Sadrži zajednièka svojstva koja nasljeðuju sve izvedene klase.
+    /// Sadrï¿½i zajedniï¿½ka svojstva koja nasljeï¿½uju sve izvedene klase.
     /// </summary>
     public abstract class Entitet
     {
         /// <summary>
-        /// Jedinstvena šifra (primarni kljuè) entiteta.
+        /// Jedinstvena ï¿½ifra (primarni kljuï¿½) entiteta.
         /// </summary>
         [Key]
+        [Column("sifra")]
         public int Sifra { get; set; }
         
     }
