@@ -9,6 +9,7 @@
   padding: 100px;
   color : #B430F0;
   font-size: 1.5 rem;
+  box-sizing: border-box;
 }
 
 .loading-spinner-overlay {
@@ -22,4 +23,21 @@
   justify-content: center; 
   align-items: center;     
   z-index: 9999; 
+}
+
+/* Media queries za manje ekrane (mobiteli) */
+@media (max-width: 768px) {
+  .app {
+    margin: 20px;
+    padding: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    margin: 10px;
+    padding: 20px;
+    font-size: 1rem;
+  }
 }
