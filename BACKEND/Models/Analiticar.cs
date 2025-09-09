@@ -34,7 +34,7 @@ namespace BACKEND.Models
         /// Stručna sprema analitičara.
         /// </summary>
 
-        [Column("strucnaSprema")]
+        [Column("strucnasprema")]
         public string StrucnaSprema { get; set; } = "";
 
         /// <summary>
