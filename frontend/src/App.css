@@ -2,19 +2,14 @@
   cursor: pointer;
 }
 
-.app {
+.app{
   min-height: 600px;
   border: 2px dotted #a47864;
-  margin: 50px auto; /* centrirano */
+  margin: 50px;
   padding: 100px;
-  color: #B430F0;
-  font-size: 1.5rem; /* ispravno */
+  color : #B430F0;
+  font-size: 1.5 rem;
   box-sizing: border-box;
-  max-width: 800px; /* ne prelazi širinu ekrana */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
 }
 
 .loading-spinner-overlay {
@@ -33,18 +28,16 @@
 /* Media queries za manje ekrane (mobiteli) */
 @media (max-width: 768px) {
   .app {
-    margin: 20px auto;
-    padding: 30px;
+    margin: 20px;
+    padding: 40px;
     font-size: 1.2rem;
-    border-width: 1.5px;
   }
 }
 
 @media (max-width: 480px) {
   .app {
-    margin: 10px auto;
+    margin: 10px;
     padding: 20px;
     font-size: 1rem;
-    border-width: 1px;
   }
 }
