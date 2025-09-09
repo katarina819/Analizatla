@@ -52,7 +52,7 @@ namespace BACKEND.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Gre�ka pri dohva�anju tablice: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Greška pri dohvaćanju tablice: {ex.Message}");
             }
 
             // Normalni dohvat po emailu
@@ -61,7 +61,7 @@ namespace BACKEND.Controllers
                 .FirstOrDefault();
 
             if (operBaza == null)
-                return StatusCode(StatusCodes.Status403Forbidden, "Niste autorizirani, ne mogu na�i operatera");
+                return StatusCode(StatusCodes.Status403Forbidden, "Niste autorizirani, ne mogu naći operatera");
 
             Console.WriteLine("Unesena lozinka: " + operater.Password);
             Console.WriteLine("Hash iz baze: " + operBaza.Lozinka);

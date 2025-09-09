@@ -85,7 +85,7 @@ namespace BACKEND.Controllers
         public IActionResult Get(int sifra)
         {
             if (sifra <= 0)
-                return BadRequest("�ifra mora biti ve�a od 0");
+                return BadRequest("Šifra mora biti veća od 0");
 
             try
             {
@@ -259,7 +259,7 @@ namespace BACKEND.Controllers
         public IActionResult Delete(int sifra)
         {
             if (sifra < 1)
-                return BadRequest(new { poruka = "�ifra mora biti ve�a od 0" });
+                return BadRequest(new { poruka = "Šifra mora biti veća od 0" });
 
             try
             {
@@ -271,17 +271,17 @@ namespace BACKEND.Controllers
                 _context.SaveChanges();
 
                 // Ako brisanje uspije
-                return Ok(new { poruka = "Analiza je uspje�no obrisana." });
+                return Ok(new { poruka = "Analiza je uspješno obrisana." });
             }
             catch (DbUpdateException)
             {
                 // Ako postoji foreign key constraint koji sprje�ava brisanje
-                return BadRequest(new { poruka = "Ne mo�ete obrisati ovu analizu jer je povezana s drugim podacima." });
+                return BadRequest(new { poruka = "Ne možete obrisati ovu analizu jer je povezana s drugim podacima." });
             }
             catch (Exception ex)
             {
                 // Ostale neo�ekivane gre�ke
-                return BadRequest(new { poruka = $"Dogodila se neo�ekivana gre�ka: {ex.Message}" });
+                return BadRequest(new { poruka = $"Dogodila se neočekivana greška: {ex.Message}" });
             }
         }
 

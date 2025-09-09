@@ -142,7 +142,7 @@ namespace BACKEND.Controller
         {
             if (sifra < 1)
             {
-                return BadRequest(new { poruka = "�ifra mora biti ve�a od 0" });
+                return BadRequest(new { poruka = "Šifra mora biti veća od 0" });
             }
 
             try
@@ -179,7 +179,7 @@ namespace BACKEND.Controller
         {
             if (sifra < 1)
             {
-                return BadRequest(new { poruka = "�ifra mora biti ve�a od 0" });
+                return BadRequest(new { poruka = "Šifra mora biti veća od 0" });
             }
 
             try
@@ -187,26 +187,26 @@ namespace BACKEND.Controller
                 Analiticar a = _context.Analiticari.Find(sifra);
                 if (a == null)
                 {
-                    return NotFound(new { poruka = "Analiti�ar ne postoji" });
+                    return NotFound(new { poruka = "Analitičar ne postoji" });
                 }
 
                 _context.Analiticari.Remove(a);
                 _context.SaveChanges();
 
-                return Ok(new { poruka = "Analiti�ar je uspje�no obrisan." });
+                return Ok(new { poruka = "Analitičar je uspješno obrisan." });
             }
             catch (DbUpdateException dbEx)
             {
                 // Ovo hvata gre�ku zbog vanjskog klju�a
                 return BadRequest(new
                 {
-                    poruka = "Ne mo�ete obrisati ovog analiti�ara jer je povezan s drugim podacima."
+                    poruka = "Ne možete obrisati ovog analitičara jer je povezan s drugim podacima."
                 });
             }
             catch (Exception ex)
             {
                 // Ostale neo�ekivane gre�ke
-                return BadRequest(new { poruka = $"Dogodila se neo�ekivana gre�ka: {ex.Message}" });
+                return BadRequest(new { poruka = $"Dogodila se neočekivana greška: {ex.Message}" });
             }
         }
 
@@ -221,7 +221,7 @@ namespace BACKEND.Controller
         {
             var analiticar = await _context.Analiticari.FindAsync(sifra);
             if (analiticar == null)
-                return NotFound("Analiti�ar ne postoji");
+                return NotFound("Analitičar ne postoji");
 
             var fileName = $"{sifra}.jpg";
 
