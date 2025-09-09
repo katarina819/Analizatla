@@ -37,11 +37,15 @@ namespace BACKEND.Controllers
         {
             try
             {
-                var podaci = _context.Analize
-                .Include(a => a.UzorakTla)
-                    .ThenInclude(u => u.Lokacija)
-                .Include(a => a.Analiticar)
-                .Select(a => new AnalizaDto
+                // 1. Dohvati podatke iz baze sa Include-ovima
+                var rawData = _context.Analize
+                    .Include(a => a.UzorakTla)
+                        .ThenInclude(u => u.Lokacija)
+                    .Include(a => a.Analiticar)
+                    .ToList(); // <-- podaci sada u memoriji
+
+                // 2. Mapiranje DTO sigurno u memoriji
+                var podaci = rawData.Select(a => new AnalizaDto
                 {
                     Sifra = a.Sifra,
                     Datum = a.Datum,
@@ -52,25 +56,26 @@ namespace BACKEND.Controllers
                     Karbonati = a.Karbonati,
                     Humus = a.Humus,
 
-                    MasaUzorka = a.UzorakTla.MasaUzorka,
-                    VrstaTla = a.UzorakTla.VrstaTla,
-                    DatumUzorka = a.UzorakTla.Datum,
-                    MjestoUzorkovanja = a.UzorakTla.Lokacija.MjestoUzorkovanja, // ispravljeno
+                    MasaUzorka = a.UzorakTla != null ? a.UzorakTla.MasaUzorka : 0,
+                    VrstaTla = a.UzorakTla != null ? a.UzorakTla.VrstaTla : "",
+                    DatumUzorka = a.UzorakTla?.Datum,
+                    MjestoUzorkovanja = a.UzorakTla?.Lokacija != null ? a.UzorakTla.Lokacija.MjestoUzorkovanja : "",
 
-                    Ime = a.Analiticar.Ime,
-                    Prezime = a.Analiticar.Prezime,
-                    Kontakt = a.Analiticar.Kontakt,
-                    StrucnaSprema = a.Analiticar.StrucnaSprema
-                })
-                .ToList();
+                    Ime = a.Analiticar != null ? a.Analiticar.Ime : "",
+                    Prezime = a.Analiticar != null ? a.Analiticar.Prezime : "",
+                    Kontakt = a.Analiticar != null ? a.Analiticar.Kontakt : "",
+                    StrucnaSprema = a.Analiticar != null ? a.Analiticar.StrucnaSprema : ""
+                }).ToList();
 
                 return Ok(podaci);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, new { poruka = e.Message });
             }
         }
+
+
 
         /// <summary>
         /// Dohva�a analizu po �ifri.

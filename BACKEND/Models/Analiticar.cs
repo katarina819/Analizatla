@@ -1,4 +1,6 @@
-﻿namespace BACKEND.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BACKEND.Models
 {
     /// <summary>
     /// Entitet koji predstavlja analitičara.
@@ -9,22 +11,30 @@
         /// <summary>
         /// Ime analitičara.
         /// </summary>
+
+        [Column("ime")]
         public string Ime { get; set; }
 
         /// <summary>
         /// Prezime analitičara.
         /// </summary>
+
+        [Column("prezime")]
         public string Prezime { get; set; }
 
         /// <summary>
         /// Kontakt podaci analitičara (e-mail, telefon itd.).
         /// </summary>
 
+
+        [Column("kontakt")]
         public string Kontakt { get; set; }
 
         /// <summary>
         /// Stručna sprema analitičara.
         /// </summary>
+
+        [Column("strucnaSprema")]
         public string StrucnaSprema { get; set; } = "";
 
         /// <summary>
@@ -37,6 +47,8 @@
         /// <summary>
         /// URL slike analitičara. Može biti null ako slika nije postavljena.
         /// </summary>
+
+        [Column("slikaUrl")]
         public string? SlikaUrl { get; set; }
 
     }
