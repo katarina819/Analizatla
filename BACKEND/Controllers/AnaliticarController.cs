@@ -291,18 +291,23 @@ namespace BACKEND.Controller
         public async Task<IActionResult> TraziAnaliticaraStranicenje(int stranica, string uvjet = "")
         {
             int poStranici = 4;
-            uvjet = uvjet.ToLower();
 
             try
             {
                 var query = _context.Analiticari.AsQueryable();
 
-                foreach (var s in uvjet.Split(" "))
+                if (!string.IsNullOrWhiteSpace(uvjet) && uvjet.Length >= 3)
                 {
-                    query = query.Where(a => a.Ime.ToLower().Contains(s) || a.Prezime.ToLower().Contains(s));
+                    foreach (var s in uvjet.Split(" ", StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string pattern = $"%{s}%";
+                        query = query.Where(a =>
+                            EF.Functions.ILike(a.Ime, pattern) ||
+                            EF.Functions.ILike(a.Prezime, pattern));
+                    }
                 }
 
-                var ukupno = await query.CountAsync(); // ukupno rezultata
+                var ukupno = await query.CountAsync();
                 var ukupnoStranica = (int)Math.Ceiling((double)ukupno / poStranici);
 
                 var lista = await query
@@ -327,7 +332,6 @@ namespace BACKEND.Controller
                 return BadRequest(new { poruka = e.Message });
             }
         }
-
 
     }
 }

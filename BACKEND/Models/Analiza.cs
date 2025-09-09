@@ -45,32 +45,42 @@ namespace BACKEND.Models
         /// pH vrijednost tla.
         /// </summary>
 
-        [Column("pHvrijednost")]
+        [Column("phvrijednost")]
         public decimal pHVrijednost { get; set; }
 
         /// <summary>
         /// Sadržaj fosfora u tlu.
         /// </summary>
+
+        [Column("fosfor")]
         public decimal Fosfor { get; set; }
 
         /// <summary>
         /// Sadržaj kalija u tlu.
         /// </summary>
+
+        [Column("kalij")]
         public decimal Kalij { get; set; }
 
         /// <summary>
         /// Sadržaj magnezija u tlu.
         /// </summary>
+
+        [Column("magnezij")]
         public decimal Magnezij { get; set; }
 
         /// <summary>
         /// Sadržaj karbonata u tlu.
         /// </summary>
+
+        [Column("karbonati")]
         public decimal Karbonati { get; set; }
 
         /// <summary>
         /// Sadržaj humusa u tlu.
         /// </summary>
+
+        [Column("humus")]
         public decimal Humus { get; set; }
 
        
