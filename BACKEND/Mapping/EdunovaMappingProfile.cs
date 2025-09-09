@@ -57,12 +57,17 @@ namespace BACKEND.Mapping
 
             // AnalizaCreateUpdateDto -> Analiza (create/update)
             CreateMap<AnalizaCreateUpdateDto, Analiza>()
-                .ForMember(dest => dest.Sifra, opt => opt.Ignore())
+                .ForMember(dest => dest.Datum, opt => opt.MapFrom(src =>
+                    src.Datum.HasValue
+                        ? DateTime.SpecifyKind(src.Datum.Value, DateTimeKind.Utc)
+                        : DateTime.UtcNow))
                 .ForMember(dest => dest.UzorakTla, opt => opt.MapFrom(src => new Uzorcitla
                 {
                     MasaUzorka = src.MasaUzorka,
                     VrstaTla = src.VrstaTla ?? "",
-                    Datum = src.DatumUzorka ?? DateTime.Now,
+                    Datum = src.DatumUzorka.HasValue
+                                ? DateTime.SpecifyKind(src.DatumUzorka.Value, DateTimeKind.Utc)
+                                : DateTime.UtcNow,
                     Lokacija = new Lokacija { MjestoUzorkovanja = src.MjestoUzorkovanja ?? "" }
                 }))
                 .ForMember(dest => dest.Analiticar, opt => opt.MapFrom(src => new Analiticar
@@ -72,13 +77,13 @@ namespace BACKEND.Mapping
                     Kontakt = src.Kontakt ?? "",
                     StrucnaSprema = src.StrucnaSprema ?? ""
                 }))
-                .ForMember(dest => dest.Datum, opt => opt.MapFrom(src => src.Datum))
                 .ForMember(dest => dest.pHVrijednost, opt => opt.MapFrom(src => src.pHVrijednost))
                 .ForMember(dest => dest.Fosfor, opt => opt.MapFrom(src => src.Fosfor))
                 .ForMember(dest => dest.Kalij, opt => opt.MapFrom(src => src.Kalij))
                 .ForMember(dest => dest.Magnezij, opt => opt.MapFrom(src => src.Magnezij))
                 .ForMember(dest => dest.Karbonati, opt => opt.MapFrom(src => src.Karbonati))
-                .ForMember(dest => dest.Humus, opt => opt.MapFrom(src => src.Humus));
+                .ForMember(dest => dest.Humus, opt => opt.MapFrom(src => src.Humus))
+                .ForMember(dest => dest.Sifra, opt => opt.Ignore());
 
             // Uzorcitla -> UzorcitlaDto
             CreateMap<Uzorcitla, UzorcitlaDto>()

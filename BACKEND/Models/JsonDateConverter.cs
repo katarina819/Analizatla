@@ -28,8 +28,9 @@ public class JsonNullableDateConverter : JsonConverter<DateTime?>
         if (string.IsNullOrEmpty(str))
             return null;
 
-        // Parse ISO 8601 string
-        return DateTime.Parse(str, null, DateTimeStyles.RoundtripKind);
+        // Parse ISO string i prisili UTC
+        var dt = DateTime.Parse(str, null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+        return DateTime.SpecifyKind(dt, DateTimeKind.Utc);
     }
 
     /// <summary>
@@ -41,9 +42,15 @@ public class JsonNullableDateConverter : JsonConverter<DateTime?>
     public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
     {
         if (value.HasValue)
-            writer.WriteStringValue(value.Value.ToString(_format)); 
+        {
+            // Prisiljava UTC prije zapisivanja
+            var utcValue = DateTime.SpecifyKind(value.Value, DateTimeKind.Utc);
+            writer.WriteStringValue(utcValue.ToString(_format));
+        }
         else
+        {
             writer.WriteNullValue();
+        }
     }
 }
 
