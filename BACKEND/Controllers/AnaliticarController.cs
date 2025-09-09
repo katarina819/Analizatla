@@ -296,7 +296,8 @@ namespace BACKEND.Controller
             {
                 var query = _context.Analiticari.AsQueryable();
 
-                if (!string.IsNullOrWhiteSpace(uvjet) && uvjet.Length >= 3)
+                // Ako uvjet ima barem 3 znaka, primijeni filter
+                if (!string.IsNullOrWhiteSpace(uvjet) && uvjet != "*" && uvjet.Length >= 3)
                 {
                     foreach (var s in uvjet.Split(" ", StringSplitOptions.RemoveEmptyEntries))
                     {
@@ -332,6 +333,7 @@ namespace BACKEND.Controller
                 return BadRequest(new { poruka = e.Message });
             }
         }
+
 
     }
 }

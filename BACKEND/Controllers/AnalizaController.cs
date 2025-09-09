@@ -59,12 +59,11 @@ namespace BACKEND.Controllers
                     MasaUzorka = a.UzorakTla != null ? a.UzorakTla.MasaUzorka : 0,
                     VrstaTla = a.UzorakTla != null ? a.UzorakTla.VrstaTla : "",
                     DatumUzorka = a.UzorakTla?.Datum,
-                    MjestoUzorkovanja = a.UzorakTla?.Lokacija != null ? a.UzorakTla.Lokacija.MjestoUzorkovanja : "",
-
-                    Ime = a.Analiticar != null ? a.Analiticar.Ime : "",
-                    Prezime = a.Analiticar != null ? a.Analiticar.Prezime : "",
-                    Kontakt = a.Analiticar != null ? a.Analiticar.Kontakt : "",
-                    StrucnaSprema = a.Analiticar != null ? a.Analiticar.StrucnaSprema : ""
+                    MjestoUzorkovanja = a.UzorakTla?.Lokacija?.MjestoUzorkovanja ?? "",
+                    Ime = a.Analiticar?.Ime ?? "",
+                    Prezime = a.Analiticar?.Prezime ?? "",
+                    Kontakt = a.Analiticar?.Kontakt ?? "",
+                    StrucnaSprema = a.Analiticar?.StrucnaSprema ?? ""
                 }).ToList();
 
                 return Ok(podaci);

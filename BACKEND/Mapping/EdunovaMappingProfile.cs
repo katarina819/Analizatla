@@ -17,22 +17,36 @@ namespace BACKEND.Mapping
                 .ForMember(dest => dest.MasaUzorka, opt => opt.MapFrom(src => src.UzorakTla.MasaUzorka))
                 .ForMember(dest => dest.VrstaTla, opt => opt.MapFrom(src => src.UzorakTla.VrstaTla))
                 .ForMember(dest => dest.DatumUzorka, opt => opt.MapFrom(src => src.UzorakTla.Datum))
-                .ForMember(dest => dest.MjestoUzorkovanja, opt => opt.MapFrom(src => src.UzorakTla.Lokacija.MjestoUzorkovanja))
-                .ForMember(dest => dest.Ime, opt => opt.MapFrom(src => src.Analiticar.Ime))
-                .ForMember(dest => dest.Prezime, opt => opt.MapFrom(src => src.Analiticar.Prezime))
-                .ForMember(dest => dest.Kontakt, opt => opt.MapFrom(src => src.Analiticar.Kontakt))
-                .ForMember(dest => dest.StrucnaSprema, opt => opt.MapFrom(src => src.Analiticar.StrucnaSprema));
+                .ForMember(dest => dest.MjestoUzorkovanja,
+                    opt => opt.MapFrom(src => src.UzorakTla != null && src.UzorakTla.Lokacija != null
+                        ? src.UzorakTla.Lokacija.MjestoUzorkovanja
+                        : ""))
+                .ForMember(dest => dest.Ime,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.Ime : ""))
+                .ForMember(dest => dest.Prezime,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.Prezime : ""))
+                .ForMember(dest => dest.Kontakt,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.Kontakt : ""))
+                .ForMember(dest => dest.StrucnaSprema,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.StrucnaSprema : ""));
 
             // Analiza -> AnalizaCreateUpdateDto (read za edit/view)
             CreateMap<Analiza, AnalizaCreateUpdateDto>()
                 .ForMember(dest => dest.MasaUzorka, opt => opt.MapFrom(src => src.UzorakTla.MasaUzorka))
                 .ForMember(dest => dest.VrstaTla, opt => opt.MapFrom(src => src.UzorakTla.VrstaTla))
                 .ForMember(dest => dest.DatumUzorka, opt => opt.MapFrom(src => src.UzorakTla.Datum))
-                .ForMember(dest => dest.MjestoUzorkovanja, opt => opt.MapFrom(src => src.UzorakTla.Lokacija.MjestoUzorkovanja))
-                .ForMember(dest => dest.Ime, opt => opt.MapFrom(src => src.Analiticar.Ime))
-                .ForMember(dest => dest.Prezime, opt => opt.MapFrom(src => src.Analiticar.Prezime))
-                .ForMember(dest => dest.Kontakt, opt => opt.MapFrom(src => src.Analiticar.Kontakt))
-                .ForMember(dest => dest.StrucnaSprema, opt => opt.MapFrom(src => src.Analiticar.StrucnaSprema))
+                .ForMember(dest => dest.MjestoUzorkovanja,
+                    opt => opt.MapFrom(src => src.UzorakTla != null && src.UzorakTla.Lokacija != null
+                        ? src.UzorakTla.Lokacija.MjestoUzorkovanja
+                        : ""))
+                .ForMember(dest => dest.Ime,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.Ime : ""))
+                .ForMember(dest => dest.Prezime,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.Prezime : ""))
+                .ForMember(dest => dest.Kontakt,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.Kontakt : ""))
+                .ForMember(dest => dest.StrucnaSprema,
+                    opt => opt.MapFrom(src => src.Analiticar != null ? src.Analiticar.StrucnaSprema : ""))
                 .ForMember(dest => dest.Datum, opt => opt.MapFrom(src => src.Datum))
                 .ForMember(dest => dest.pHVrijednost, opt => opt.MapFrom(src => src.pHVrijednost))
                 .ForMember(dest => dest.Fosfor, opt => opt.MapFrom(src => src.Fosfor))
@@ -43,7 +57,7 @@ namespace BACKEND.Mapping
 
             // AnalizaCreateUpdateDto -> Analiza (create/update)
             CreateMap<AnalizaCreateUpdateDto, Analiza>()
-                .ForMember(dest => dest.Sifra, opt => opt.Ignore()) // auto-generirano u bazi
+                .ForMember(dest => dest.Sifra, opt => opt.Ignore())
                 .ForMember(dest => dest.UzorakTla, opt => opt.MapFrom(src => new Uzorcitla
                 {
                     MasaUzorka = src.MasaUzorka,
@@ -68,20 +82,21 @@ namespace BACKEND.Mapping
 
             // Uzorcitla -> UzorcitlaDto
             CreateMap<Uzorcitla, UzorcitlaDto>()
-                .ForMember(dest => dest.MjestoUzorkovanja, opt => opt.MapFrom(src => src.Lokacija.MjestoUzorkovanja));
+                .ForMember(dest => dest.MjestoUzorkovanja,
+                    opt => opt.MapFrom(src => src.Lokacija != null ? src.Lokacija.MjestoUzorkovanja : ""));
 
             // UzorcitlaDto -> Uzorcitla (update)
             CreateMap<UzorcitlaDto, Uzorcitla>()
-                .ForMember(dest => dest.Sifra, opt => opt.Ignore()) // auto-generirano
-                .ForMember(dest => dest.Lokacija, opt => opt.Ignore()); // Lokacija je navigacijski objekt
+                .ForMember(dest => dest.Sifra, opt => opt.Ignore())
+                .ForMember(dest => dest.Lokacija, opt => opt.Ignore());
 
             // Analiticar -> AnaliticarDTO (read)
             CreateMap<Analiticar, AnaliticarDTO>();
 
             // AnaliticarDTO -> Analiticar (create/update)
             CreateMap<AnaliticarDTO, Analiticar>()
-                .ForMember(dest => dest.Sifra, opt => opt.Ignore()) // auto-generirano
-                .ForMember(dest => dest.SlikaUrl, opt => opt.Ignore()); // Slika se dodaje posebno
+                .ForMember(dest => dest.Sifra, opt => opt.Ignore())
+                .ForMember(dest => dest.SlikaUrl, opt => opt.Ignore());
         }
     }
 }
