@@ -10,70 +10,62 @@ namespace BACKEND.Data
     /// </summary>
     public class EdunovaContext : DbContext
     {
-        /// <summary>
-        /// Konstruktor koji prima opcije konfiguracije za DbContext.
-        /// </summary>
-        /// <param name="options">Opcije konfiguracije DbContext-a.</param>
-        public EdunovaContext(DbContextOptions<EdunovaContext>options): base(options)
-        { 
-
+        public EdunovaContext(DbContextOptions<EdunovaContext> options) : base(options)
+        {
         }
 
-        /// <summary>
-        /// DbSet za entitet <see cref="Lokacija"/>.
-        /// </summary>
         public DbSet<Lokacija> Lokacije { get; set; }
-
-        /// <summary>
-        /// DbSet za entitet <see cref="Analiticar"/>.
-        /// </summary>
         public DbSet<Analiticar> Analiticari { get; set; }
-
-        /// <summary>
-        /// DbSet za entitet <see cref="Uzorcitla"/>.
-        /// </summary>
-        public DbSet<Uzorcitla> UzorciTla {  get; set; }
-
-        /// <summary>
-        /// DbSet za entitet <see cref="Analiza"/>.
-        /// </summary>
-        public DbSet<Analiza> Analize {  get; set; }
-
-        /// <summary>
-        /// DbSet za entitet <see cref="Operater"/>.
-        /// </summary>
+        public DbSet<Uzorcitla> UzorciTla { get; set; }
+        public DbSet<Analiza> Analize { get; set; }
         public DbSet<Operater> Operateri { get; set; }
 
-        /// <summary>
-        /// Metoda koja konfigurira model i odnose između entiteta u bazi podataka.
-        /// </summary>
-        /// <param name="modelBuilder">ModelBuilder koji se koristi za konfiguraciju entiteta.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Operateri
             modelBuilder.Entity<Operater>().ToTable("operateri");
 
-            // Lokacija 1 - N UzorakTla
+            // Lokacije
+            modelBuilder.Entity<Lokacija>().ToTable("lokacije");
+
+            // Analiticari
+            modelBuilder.Entity<Analiticar>().ToTable("analiticari");
+            modelBuilder.Entity<Analiticar>()
+                .Property(a => a.SlikaUrl)
+                .HasColumnName("slikaurl");
+
+            // UzorciTla
+            modelBuilder.Entity<Uzorcitla>().ToTable("uzorcitla");
             modelBuilder.Entity<Uzorcitla>()
                 .HasOne(u => u.Lokacija)
                 .WithMany(l => l.UzorciTla)
-                .HasForeignKey(u => u.LokacijaId);
+                .HasForeignKey(u => u.LokacijaId)
+                .HasConstraintName("fk_uzorcitla_lokacije");
 
-            // UzorakTla 1 - N Analiza
+            // Analize
+            modelBuilder.Entity<Analiza>().ToTable("analize");
+
             modelBuilder.Entity<Analiza>()
-                .HasOne(a => a.UzorakTla)
-                .WithMany(u => u.Analize)
-                .HasForeignKey(a => a.UzorakTlaId);
+                .Property(a => a.AnaliticarId)
+                .HasColumnName("analiticar");
 
-            // Analiticar 1 - N Analiza
+            modelBuilder.Entity<Analiza>()
+                .Property(a => a.UzorakTlaId)
+                .HasColumnName("uzoraktla");
+
             modelBuilder.Entity<Analiza>()
                 .HasOne(a => a.Analiticar)
                 .WithMany(an => an.Analize)
-                .HasForeignKey(a => a.AnaliticarId);
+                .HasForeignKey(a => a.AnaliticarId)
+                .HasConstraintName("fk_analize_analiticari");
+
+            modelBuilder.Entity<Analiza>()
+                .HasOne(a => a.UzorakTla)
+                .WithMany(u => u.Analize)
+                .HasForeignKey(a => a.UzorakTlaId)
+                .HasConstraintName("fk_analize_uzorcitla");
         }
-
-
-
     }
 }

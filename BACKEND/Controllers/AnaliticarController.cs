@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 namespace BACKEND.Controller
 {
     /// <summary>
-    /// Kontroler za upravljanje analitièarima.
-    /// Omoguæuje CRUD operacije, dodavanje slike, pretraživanje i paginaciju.
+    /// Kontroler za upravljanje analitiï¿½arima.
+    /// Omoguï¿½uje CRUD operacije, dodavanje slike, pretraï¿½ivanje i paginaciju.
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -35,9 +35,9 @@ namespace BACKEND.Controller
         }
 
         /// <summary>
-        /// Dohvaæa sve analitièare.
+        /// Dohvaï¿½a sve analitiï¿½are.
         /// </summary>
-        /// <returns>Lista svih analitièara u obliku <see cref="AnaliticarDTO"/>.</returns>
+        /// <returns>Lista svih analitiï¿½ara u obliku <see cref="AnaliticarDTO"/>.</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -64,15 +64,15 @@ namespace BACKEND.Controller
         }
 
         /// <summary>
-        /// Dohvaæa analitièara po šifri.
+        /// Dohvaï¿½a analitiï¿½ara po ï¿½ifri.
         /// </summary>
-        /// <param name="sifra">Jedinstvena šifra analitièara.</param>
-        /// <returns>Objekt <see cref="AnaliticarDTO"/> ako postoji, 404 NotFound inaèe.</returns>
+        /// <param name="sifra">Jedinstvena ï¿½ifra analitiï¿½ara.</param>
+        /// <returns>Objekt <see cref="AnaliticarDTO"/> ako postoji, 404 NotFound inaï¿½e.</returns>
         [HttpGet("{sifra:int}")]
         public async Task<IActionResult> Get(int sifra)
         {
             if (sifra <= 0)
-                return BadRequest("Šifra nije dobra");
+                return BadRequest("ï¿½ifra nije dobra");
 
             try
             {
@@ -102,7 +102,7 @@ namespace BACKEND.Controller
 
 
         /// <summary>
-        /// Dodaje novog analitièara u bazu.
+        /// Dodaje novog analitiï¿½ara u bazu.
         /// </summary>
         /// <param name="analiticar">Objekt <see cref="Analiticar"/> s podacima za kreiranje.</param>
         /// <returns>Stvoreni objekt <see cref="Analiticar"/> s HTTP status 201 Created.</returns>
@@ -132,17 +132,17 @@ namespace BACKEND.Controller
         }
 
         /// <summary>
-        /// Ažurira postojeæeg analitièara.
+        /// Aï¿½urira postojeï¿½eg analitiï¿½ara.
         /// </summary>
-        /// <param name="sifra">Šifra analitièara koji se ažurira.</param>
+        /// <param name="sifra">ï¿½ifra analitiï¿½ara koji se aï¿½urira.</param>
         /// <param name="analiticar">Objekt <see cref="Analiticar"/> s novim podacima.</param>
-        /// <returns>HTTP 200 OK ako je uspješno ažurirano, 404 ako ne postoji.</returns>
+        /// <returns>HTTP 200 OK ako je uspjeï¿½no aï¿½urirano, 404 ako ne postoji.</returns>
         [HttpPut("{sifra:int}")]
         public IActionResult Put(int sifra, Analiticar analiticar)
         {
             if (sifra < 1)
             {
-                return BadRequest(new { poruka = "Šifra mora biti veæa od 0" });
+                return BadRequest(new { poruka = "ï¿½ifra mora biti veï¿½a od 0" });
             }
 
             try
@@ -170,16 +170,16 @@ namespace BACKEND.Controller
         }
 
         /// <summary>
-        /// Briše analitièara po šifri.
+        /// Briï¿½e analitiï¿½ara po ï¿½ifri.
         /// </summary>
-        /// <param name="sifra">Šifra analitièara koji se briše.</param>
+        /// <param name="sifra">ï¿½ifra analitiï¿½ara koji se briï¿½e.</param>
         /// <returns>Poruka o uspjehu ili neuspjehu brisanja.</returns>
         [HttpDelete("{sifra:int}")]
         public IActionResult Delete(int sifra)
         {
             if (sifra < 1)
             {
-                return BadRequest(new { poruka = "Šifra mora biti veæa od 0" });
+                return BadRequest(new { poruka = "ï¿½ifra mora biti veï¿½a od 0" });
             }
 
             try
@@ -187,33 +187,33 @@ namespace BACKEND.Controller
                 Analiticar a = _context.Analiticari.Find(sifra);
                 if (a == null)
                 {
-                    return NotFound(new { poruka = "Analitièar ne postoji" });
+                    return NotFound(new { poruka = "Analitiï¿½ar ne postoji" });
                 }
 
                 _context.Analiticari.Remove(a);
                 _context.SaveChanges();
 
-                return Ok(new { poruka = "Analitièar je uspješno obrisan." });
+                return Ok(new { poruka = "Analitiï¿½ar je uspjeï¿½no obrisan." });
             }
             catch (DbUpdateException dbEx)
             {
-                // Ovo hvata grešku zbog vanjskog kljuèa
+                // Ovo hvata greï¿½ku zbog vanjskog kljuï¿½a
                 return BadRequest(new
                 {
-                    poruka = "Ne možete obrisati ovog analitièara jer je povezan s drugim podacima."
+                    poruka = "Ne moï¿½ete obrisati ovog analitiï¿½ara jer je povezan s drugim podacima."
                 });
             }
             catch (Exception ex)
             {
-                // Ostale neoèekivane greške
-                return BadRequest(new { poruka = $"Dogodila se neoèekivana greška: {ex.Message}" });
+                // Ostale neoï¿½ekivane greï¿½ke
+                return BadRequest(new { poruka = $"Dogodila se neoï¿½ekivana greï¿½ka: {ex.Message}" });
             }
         }
 
         /// <summary>
-        /// Dodaje sliku analitièaru.
+        /// Dodaje sliku analitiï¿½aru.
         /// </summary>
-        /// <param name="sifra">Šifra analitièara.</param>
+        /// <param name="sifra">ï¿½ifra analitiï¿½ara.</param>
         /// <param name="dto">DTO objekt <see cref="SlikaDTO"/> s Base64 podacima slike.</param>
         /// <returns>Poruka i URL spremljene slike.</returns>
         [HttpPost("{sifra}/slika")]
@@ -221,11 +221,11 @@ namespace BACKEND.Controller
         {
             var analiticar = await _context.Analiticari.FindAsync(sifra);
             if (analiticar == null)
-                return NotFound("Analitièar ne postoji");
+                return NotFound("Analitiï¿½ar ne postoji");
 
             var fileName = $"{sifra}.jpg";
 
-            // Ruèna instanca SlikaService
+            // Ruï¿½na instanca SlikaService
             var slikaService = new SlikaService(this.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>());
             var slikaUrl = slikaService.SpremiSliku(dto.Base64, fileName);
 
@@ -237,10 +237,10 @@ namespace BACKEND.Controller
         }
 
         /// <summary>
-        /// Pretražuje analitièare po imenu ili prezimenu.
+        /// Pretraï¿½uje analitiï¿½are po imenu ili prezimenu.
         /// </summary>
-        /// <param name="uvjet">Uvjet za pretraživanje (barem 3 znaka).</param>
-        /// <returns>Lista <see cref="AnaliticarDTO"/> koji zadovoljavaju uvjet pretraživanja.</returns>
+        /// <param name="uvjet">Uvjet za pretraï¿½ivanje (barem 3 znaka).</param>
+        /// <returns>Lista <see cref="AnaliticarDTO"/> koji zadovoljavaju uvjet pretraï¿½ivanja.</returns>
         // GET api/v1/Analiticar/trazi/{uvjet}
         [HttpGet("trazi/{uvjet}")]
         public async Task<IActionResult> TraziAnaliticara(string uvjet)
@@ -281,10 +281,10 @@ namespace BACKEND.Controller
 
 
         /// <summary>
-        /// Pretražuje analitièare s podrškom za paginaciju.
+        /// Pretraï¿½uje analitiï¿½are s podrï¿½kom za paginaciju.
         /// </summary>
-        /// <param name="stranica">Broj stranice koju želimo dohvatiti.</param>
-        /// <param name="uvjet">Opcionalni uvjet za pretraživanje.</param>
+        /// <param name="stranica">Broj stranice koju ï¿½elimo dohvatiti.</param>
+        /// <param name="uvjet">Opcionalni uvjet za pretraï¿½ivanje.</param>
         /// <returns>Objekt s listom rezultata i ukupnim brojem stranica.</returns>
         // GET api/v1/Analiticar/traziStranicenje/{stranica}?uvjet=...
         [HttpGet("traziStranicenje/{stranica}")]
